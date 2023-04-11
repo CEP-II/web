@@ -1,9 +1,8 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import 'bootstrap/dist/css/bootstrap.css'
+import {Variables} from '../data/globalVariable';
 
-import mqtt from 'mqtt'
-import axios from 'axios'
 
 
 
@@ -16,72 +15,40 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
 
+const mqtt = require('mqtt');
 
-/*
-async function continuouslySubscribeAndPost() {
-    //if already connected, dont connect again
-    
-        
+const client = mqtt.connect('mqtt://192.168.0.149:1883');
 
-    const client = mqtt.connect('mqtt://192.168.0.149:1883');
-    { 
-        client.on('connect', () => {
-            console.log('connected XD');
-            client.subscribe('test', (err) => {
-                if (err) {
-                    console.log(err);
-                }
-            });
-        });
+client.on('connect', () => {
+  console.log('Connected to MQTT broker!');
+  client.subscribe('test');
+});
 
-        //when a message is received
-        //topic is the topic of the message, 
-        client.on('message', (topic, message) => {
-            console.log(message.toString());
-            //post the message to the backend
-            axios.post('http://localhost:3000/api/insert', {
-                topic: topic.toString(),
-                message: message.toString()
-            })
-            .then(response => {
-                console.log(response);
+client.on('message', (topic, message) => {
+    console.log(message.toString());
 
-            })
-            .catch(error => {
-                console.log(error);
-
-            })
-        });   
+   
+    //publish to api 
+    /*
+    axios.post(Variables.API_URL + '/data', {
+        message: message.toString()
+    })
+    .then(function (response) {
+        console.log(response);
     }
-}
-continuouslySubscribeAndPost();*/
-
-/*
-
-//function to test the mqtt connection
-async function testMqttConnection() {
-
-    const client = mqtt.connect('mqtt://test.mosquitto.org');
-
-    client.on('connect', function() {
-    console.log('Connected to MQTT broker');
-    client.subscribe('test/topic', function(err) {
-        if (err) {
-        console.log('Error subscribing to topic:', err);
-        } else {
-        console.log('Subscribed to topic');
-        }
-    });
-    });
-
-    client.on('message', function(topic, message) {
-    console.log('Message received:', message.toString());
-    }   
+    )
+    .catch(function (error) {
+        console.log(error);
+    }
     );
+    */
 
-}
 
-testMqttConnection();
 
-*/
+
+
+
+});
+
+
 
