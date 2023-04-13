@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import Cookies from 'js-cookie';
-//import URLandToken from '../data/globalVariable';
+
 import {Variables} from '../data/globalVariable';
 
 
@@ -68,16 +68,21 @@ function ShowData() {
 
   return (
     <div>
+
       <div>
         {/*This is the log of button in right corner*/}
         <button onClick={() => {
           Cookies.remove('token');
           window.location.href = '/';
         }}>Log out</button>
-
-
-
       </div>
+        
+      {/*button to go to the admin page*/} 
+      <button onClick={() => {
+        window.location.href = '/adminPage';
+      }}>Admin</button>
+      
+
       {timeStamps.map((timeStamp) => (
         <div key={timeStamp._id}>
           <p>Start: {timeStamp.start}</p>
