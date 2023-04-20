@@ -55,8 +55,8 @@ function ShowData() {
 
       
    
-    fetchData();
-    
+  fetchData();
+  
 
 
   }, []);
