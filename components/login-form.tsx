@@ -43,7 +43,8 @@ interface Values {
           //call the hoc to check if the token is valid
           window.location.href = '/data';
           
-        } else {
+        } 
+        else {
           // Passwords don't match, login failed
           console.log('Incorrect password');
           //removes from the password box
@@ -61,6 +62,13 @@ interface Values {
         // Handle error
         console.log(error);
         setSubmitting(false); 
+
+        // Passwords don't match, login failed
+        console.log('Incorrect password');
+        //removes from the password box
+        values.password = '';
+        //make the password box text red for 2 seconds
+        setLoginSuccess(false);
         
         setTimeout(() => {
           setLoginSuccess(true);

@@ -1,7 +1,9 @@
 import axios from "axios";
-import { Formik, Form, Field, FormikHelpers } from "formik";
+import { Formik, Form, Field, FormikHelpers, FormikProps } from "formik";
 import { Variables } from "../data/globalVariable";
 import Cookies from 'js-cookie';
+
+//
 
 
 interface Values {
@@ -20,6 +22,18 @@ export default function AdminForm() {
     //this function will create a new user in the database
 
     const createUser = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+        //make a pop up window to confirm the user creation
+        if (confirm("Are you sure you want to create this user?")) {
+            //send the post request to the backend to create a new user in the database
+            //send the token in the header to make sure the user is logged in
+
+            //print the values from the form in console
+            console.log(values.username);
+            
+            
+            }
+        }
+        /*
         //send the post request to the backend to create a new user in the database
         //send the token in the header to make sure the user is logged in
         axios.post(Variables.API_URL + '/users', {
@@ -44,7 +58,8 @@ export default function AdminForm() {
         .catch(error => {
             console.error(error);
         });
-    }
+        */
+    
 
     /*
     //this function will fetch the users from the database
@@ -64,51 +79,76 @@ export default function AdminForm() {
     }
     */
 
+    //this function will reset the form
+
+    const resetForm = (formikProps) => {
+        formikProps.resetForm();
+      };
+      
+      
+
     return (
-        <div>
-            <Formik
-                initialValues={{
-                    username: "",
-                    password: "",
-                    phoneNumber : "",
-                    email : "",
-                    firstName : "",
-                    lastName : "",
-                    address : "",
-                }}
-                onSubmit={createUser}
-            >
-                <Form>
-                    <label htmlFor="username">Username</label>
-                    <Field id="username" name="username" placeholder="Username" />
-                    
-                    <label htmlFor="password">Password</label>
-                    <Field id="password" name="password" placeholder="Password" />
-
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <Field id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
-
-                    <label htmlFor="email">Email</label>
-                    <Field id="email" name="email" placeholder="Email" />
-
-                    <label htmlFor="firstName">First Name</label>
-                    <Field id="firstName" name="firstName" placeholder="First Name" />
-
-                    <label htmlFor="lastName">Last Name</label>
-                    <Field id="lastName" name="lastName" placeholder="Last Name" />
-
-                    <label htmlFor="address">Address</label>
-                    <Field id="address" name="address" placeholder="Address" />
-
-                    <button type="submit">Create User</button>
-                </Form>
-            </Formik>
-        </div>
-    )
-}
-
-
-                    
+        <div className="container">
                 
-        //
-
+            <div>
+                <Formik
+                    initialValues={{
+                        username: "",
+                        password: "",
+                        phoneNumber: "",
+                        email: "",
+                        firstName: "",
+                        lastName: "",
+                        address: "",
+                    }}
+                    
+                    onSubmit={createUser}
+                    
+                >
+                    <Form>
+                        <div className="mb-2">
+                            
+                            <Field id="username" name="username" placeholder="Username" />
+                        </div>
+        
+                        <div className="mb-2">
+                            
+                            <Field id="password" name="password" placeholder="Password" />
+                        </div>
+        
+                        <div className="mb-2">
+                        
+                            <Field id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
+                        </div>
+        
+                        <div className="mb-2">
+            
+                            <Field id="email" name="email" placeholder="Email" />
+                        </div>
+        
+                        <div className="mb-2">
+            
+                            <Field id="firstName" name="firstName" placeholder="First Name" />
+                        </div>
+        
+                        <div className="mb-2">
+            
+                            <Field id="lastName" name="lastName" placeholder="Last Name" />
+                        </div>
+        
+                        <div className="mb-2">
+                
+                            <Field id="address" name="address" placeholder="Address" />
+                        </div>
+                        <div>
+                        <button type="submit">Create User</button>
+                        <button type="button" onClick={() => resetForm(formikProps)}>Clear Fields</button>
+                        
+                        </div>
+                    </Form>
+                </Formik>
+            </div>
+        </div>
+        );
+    }
+    

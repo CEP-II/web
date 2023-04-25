@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
 
-/*
+
 
 const mqtt = require('mqtt');
 const axios = require('axios');
@@ -30,7 +30,7 @@ client.on('message', (topic, message) => {
 
    
    //publish to api 
-    
+    /*
     axios.post(Variables.API_URL + '/timestamps', {
         message
     })
@@ -41,8 +41,9 @@ client.on('message', (topic, message) => {
     .catch(function (error) {
         console.log(error);
   }
-);
+  
+  );*/
 });
-*/
+
 
 
