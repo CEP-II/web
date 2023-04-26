@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import withAuth from '../HOC'; // import the HOC
-import ShowData from 'components/show-data';
+import ShowData from 'components/show-data-copy';
 
 const Dashboard: NextPage = () => {
   return (

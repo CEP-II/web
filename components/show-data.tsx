@@ -12,53 +12,51 @@ import {Variables} from '../data/globalVariable';
 
 
 function ShowData() {
+  
   const [timeStamps, setTimeStamps] = useState([]);
 
-  //write the timer on the cookie in console
-  //how much time it has left
-  console.log(Cookies.get('token'));
 
-  useEffect(() => {
+  useEffect(() => {  
+    function fetchData() 
+    {
 
-/*
-    async function fetchData() {
-      try {
-        const response = await axios.get(Variables.API_URL + '/timestamps', {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('token')}`,
-          }
-        })
+      console.log("fetching data");
 
-          setTimeStamps(response.data.timestamps);
-        } catch (error) {
-          console.error(error);
-        }
-      }*/
+      console.log(Cookies.get('token'));
 
-   
-    function fetchData() {
 
-      axios.get(Variables.API_URL + '/timestamps', {
+
+
+      axios.get(Variables.API_URL + '/timestamps?page=1&2', {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
-      }).then(response => {
-        if (response.data.valid){
-          //set the token cookie to expire in 10 minutes
-          Cookies.set('token', response.data.token, { expires: 1/24/6 });
-      }
-        setTimeStamps(response.data.timestamps);
-      }).catch(error => {
-        console.error(error);
+      }).then(response => 
+        {
+          /*
+          if (response.data.valid)
+          {
+            //set the token cookie to expire in 10 minutes
+            Cookies.set('token', response.data.token, { expires: 1/24/6 });
+          }*/
+          console.log("response" + response.data);
+          
+          for (var i = 0; i < response.data.length; i++)
+          {
+            console.log(response.data[i]);
+            setTimeStamps(response.data[i])
+          }
+
+        }).catch(error => {
+        console.error("is error" + error);
       });
+
+      console.log("done fetching data");
     }
 
       
-   
   fetchData();
   
-
-
   }, []);
 
 
@@ -68,23 +66,19 @@ function ShowData() {
 
   return (
     <div>
-
-   
-        
-     
-      
-
-      {timeStamps.map((timeStamp) => (
-        <div key={timeStamp._id}>
-          <p>Start: {timeStamp.start}</p>
-          <p>End: {timeStamp.end}</p>
-          <p>Citizen: {timeStamp.citizen ? timeStamp.citizen.name : 'No citizen'}</p>
+      {timeStamps.map
+        ((timeStamp) => (
+          <div key={timeStamp._id}>
+            <p>Start: {timeStamp.start}</p>
+            <p>End: {timeStamp.end}</p>
+            <p>Citizen: {timeStamp.citizen ? timeStamp.citizen.name : 'No citizen'}</p>
 
           
        
        
-        </div>
-      ))}
+           </div>
+        ))
+      }
 
 
 

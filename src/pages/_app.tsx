@@ -13,12 +13,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
 
-
+/*
 
 const mqtt = require('mqtt');
 const axios = require('axios');
 
-const client = mqtt.connect('mqtt://localhost:1883');
+const client = mqtt.connect('mqtt://:1883');
 
 client.on('connect', () => {
   console.log('Connected to MQTT broker!');
@@ -30,20 +30,16 @@ client.on('message', (topic, message) => {
 
    
    //publish to api 
-    /*
+    
     axios.post(Variables.API_URL + '/timestamps', {
-        message
+
+      
     })
-    .then(function (response) {
-        console.log(response);
-    }
-    )
-    .catch(function (error) {
-        console.log(error);
-  }
+    .then(response => {console.log(response.data.message)})
+    .catch(error => {console.error(error);});
   
-  );*/
 });
 
+*/
 
 
