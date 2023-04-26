@@ -69,18 +69,9 @@ function ShowData() {
   return (
     <div>
 
-      <div>
-        {/*This is the log of button in right corner*/}
-        <button onClick={() => {
-          Cookies.remove('token');
-          window.location.href = '/';
-        }}>Log out</button>
-      </div>
+   
         
-      {/*button to go to the admin page*/} 
-      <button onClick={() => {
-        window.location.href = '/adminPage';
-      }}>Admin</button>
+     
       
 
       {timeStamps.map((timeStamp) => (
@@ -94,6 +85,24 @@ function ShowData() {
        
         </div>
       ))}
+
+
+
+      <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+       
+        <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+          window.location.href = '/adminPage';
+        }}>Admin</button>
+
+        <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
+          Cookies.remove('token');
+          window.location.href = '/';
+        }}>Log out</button>
+      
+      
+      </div>
+      
+
     </div>
   );
 }
