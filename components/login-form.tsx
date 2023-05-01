@@ -8,23 +8,30 @@ import { useState } from 'react';
 import {Variables} from '../data/globalVariable';
 import Cookies from 'js-cookie';
 import Toggle from "react-switch";
+import {Switch} from 'antd';
 
 const admin = true;
 
 interface Values {
   username: string;
   password: string;
-  Admin: boolean;
+  isAdmin: boolean;
 }
 
   export default function LoginForm() {
     const [loginSuccess, setLoginSuccess] = useState<boolean>(true);
 
+    
     //this function will handle the login
     //send http request to the backend and get token if login is successful
     const handleSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-      if(admin)
+
+      if(values.isAdmin == true)
       {
+        //if the user we send to the admin url to login and if its a normal citezen we send to the citizen url
+       
+        console.log("admin login");
+        
         axios.post(Variables.API_URL + '/admin/login', {
           username: values.username,
           password: values.password
@@ -80,6 +87,7 @@ interface Values {
       }
       else
       {
+        console.log("citizen login");
         axios.post(Variables.API_URL + '/citezen/login', {
           email: values.username,
           password: values.password
@@ -136,6 +144,22 @@ interface Values {
       
 
   }
+/*
+  const CustomSwitch = ({ field, form, ...props }) => {
+    const handleChange = (value) => {
+      form.setFieldValue(field.name, value); // update field value in formik
+      //update the isAdmin state
+      console.log("isAdmin value: " + value);
+    };
+  
+    return (
+      <Switch
+        {...props}
+        checked={field.value} // pass in the field value to determine the switch position
+        onChange={handleChange} // handle switch change event and update formik field value
+      />
+    );
+  }; */
 
 
   return (
@@ -144,51 +168,45 @@ interface Values {
       <div className="d-flex justify-content-center align-items-start">
         <Image src={mypic} alt="" width="800" height="250" />
       </div>
-      <h1 className="display-6 mb-3">Login</h1>
+      
       <Formik
         initialValues={{
           username: '',
           password: '',
-          Admin: true,
+          isAdmin: false, // use "isAdmin" instead of "Admin"
         }}
         //handle summit that is called when the user clicks the login button
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <div className="mb-2">
-              <Field className="form-control" id="username" name="username" placeholder="Username" aria-describedby="usernameHelp" />
-            </div>
-            <div className="mb-4">
-              <Field className={`form-control ${loginSuccess ? '' : 'is-invalid'}`} id="password" name="password" placeholder="Password" type="password" />
-              {loginSuccess === false && <div className="invalid-feedback">Incorrect password or username</div>}
-            </div>
-            {/* Put a button for login in the center under the password box*/}
-            <div className="d-flex justify-content-center">
-              {/*this is the login button, it is disabled when the user is submitting*/}
-              <button type="submit" className="btn btn-primary" style={{marginRight: '10px'}} disabled={isSubmitting}>Login</button>
-            
-
-            {/* Add a toggle button for the admin switch 
-            
-          
-            
-            <Field name="isAdmin">
-            {({ field }: FieldProps<boolean>) => (
-              <Toggle
-                {...field}
-                id="isAdmin"
-                checked={field.value}
-                onChange={() => field.onChange(!field.value)}
-                value={field.value ? 'true' : 'false'}
-              />
-            )}
-          </Field>
-            */}
-              
-              </div>
-
-          </Form>
+        <Form>
+        <div className="d-flex flex-column align-items-center">
+          <h1 className="display-6 mb-3">Login</h1>
+      
+          <div className="mb-2">
+            <Field className="form-control" id="username" name="username" placeholder="email" aria-describedby="usernameHelp" style={{ width: '300px' }} />
+          </div>
+      
+          <div className="mb-4">
+            <Field className={`form-control ${loginSuccess ? '' : 'is-invalid'}`} id="password" name="password" placeholder="Password" type="password" style={{ width: '300px' }}/>
+            {loginSuccess === false && <div className="invalid-feedback">Incorrect password or username</div>}
+          </div>
+      
+          <div className="d-flex justify-content-center">
+            <button type="submit" className="btn btn-primary mr-3" style={{marginRight: '15px'}}disabled={isSubmitting}>
+              Login
+            </button>
+      
+            <label style={{marginTop: '8px', marginRight: '5px'}}  htmlFor="isAdmin">Admin</label>
+            <Field name="isAdmin" >
+              {({ field: { value }, form: { setFieldValue } }) => (
+                <Switch style={{marginTop: '10px'}} checked={value} onChange={(value) => {setFieldValue('isAdmin', value);setFieldValue('username', value ? 'admin' : '')}} />
+              )}
+            </Field>
+          </div>
+        </div>
+      </Form>
+      
         )}
       </Formik>
     </div>

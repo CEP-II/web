@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import LoginForm from 'components/login-form'
 
+
 // This is the page that is shown when you go to localhost:3000
 const Home: NextPage = () => {
   return (

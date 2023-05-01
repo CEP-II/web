@@ -1,51 +1,55 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
 import Cookies from 'js-cookie';
 import {Variables} from '../data/globalVariable';
 
-function ShowData() {
+
+
+
+
+ 
+interface Values{
+  citizenId: string;
+}
+
+interface Timestamp {
+  id: number;
+  startTime: string;
+  endTime: string;
+  citizen: string;
+}
+
+
+function ShowData() 
+{
 
   //the next line is smart way of storing data in next.js/react.
   //it is a hook that stores the data in the state of the component
   //it gives a function to update the state(data) and a variable to get the data
   
-const [timeStamps, setTimeStamps] = useState([]);
+const [timeStamps, setTimeStamps] = useState<any[]>([]);
 
   //var timeStamps;
 
   useEffect(() => {  
     function fetchData() 
     {
-      axios.get(Variables.API_URL + '/timestamps?page=1&2', {
+      axios.get(Variables.API_URL + '/timestamps?page=2&4', {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
       }).then(response => 
         {
-          //the data as an array of objects
-          //setTimeStamps(response.data)
+          console.log(response.data.timestamps[0])
+          setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps[0]]);
 
-       
-
-          console.log("this is the response");
-
-          console.log(response.data.timestamps);
-
-          console.log("this is responce 0" );
-          
-          console.log(response.data.timestamps[0].id);
-          
-          console.log("this is responce 0 to jsonstringfy" );
-          //go from json to tostring
-          console.log(JSON.stringify(response.data.timestamps[0]));
-
-          setTimeStamps(response.data.timestamps);
 
         }).catch(error => {
         console.error("is error" + error);
       });
     }
+  
   
   fetchData();
   
@@ -56,36 +60,63 @@ const [timeStamps, setTimeStamps] = useState([]);
   //can be also be called with a citezen id to only show that citezen
   
   
-
+ 
 
   
-  function showData()
+function showData(citezenID?: string)
   {
     //create a new array to store the data
     var data = [];
-    //loop through the data and rewrite it
-    for (var i = 0; i < timeStamps.length; i++)
+
+    if(citezenID)
     {
-      
-      //create a new object to store the data
-      for (var i = 0; i < timeStamps.length; i++) {
-        //create a string to store the data
-        var str = `id: ${timeStamps[i].id}, startTime: ${timeStamps[i].startTime}, endTime: ${timeStamps[i].endTime}, citizen: ${timeStamps[i].citizen}`;
-        //add the string to the array
-        data.push(str);
+      //only add the data with the correct citezen id
+      for (var i = 0; i < timeStamps.length; i++)
+      {
+        if(timeStamps[i].citizen == citezenID)
+        {
+          //create a string to store the data
+          var str = `id: ${timeStamps[i].id}, startTime: ${timeStamps[i].startTime}, endTime: ${timeStamps[i].endTime}, citizen: ${timeStamps[i].citizen}`;
+          //add the string to the array
+          data.push(str);
+        }
+
       }
-   
+      return data;
     }
-    //return the array
-    return data;
+    else
+    {
+
+    
+      //loop through the data and rewrite it
+      for (var i = 0; i < timeStamps.length; i++)
+      {
+        
+        //create a new object to store the data
+        for (var i = 0; i < timeStamps.length; i++) {
+          //create a string to store the data
+          var str = `id: ${timeStamps[i]._id}, startTime: ${timeStamps[i].startTime}, endTime: ${timeStamps[i].endTime}, citizen: ${timeStamps[i].citizen}`;
+          //add the string to the array
+          data.push(str);
+        }
+    
+      }
+      //return the array
+      return data;
+    }
   }
+  
 
   showData()
 
-  return (
-    <div>
 
-      <h1>show data</h1>
+
+  const handleSubmit = ( values: Values , { setSubmitting }: FormikHelpers<Values>) =>{
+    showData(values.citizenId);
+  }
+
+  return (
+    <div style={{backgroundColor: '#ABE7EB'}}>
       <div>
         {showData().map((item, index) => (
           <div key={index}>
@@ -93,17 +124,28 @@ const [timeStamps, setTimeStamps] = useState([]);
           </div>
         ))}
       </div>
-
       
-      <div style={{position: 'absolute' , top: '10px' , left: '10px', padding: '10px'}}>
-          <Field id="citizenId" name="citizenId" placeholder="citizenId" type="text" />
+      <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
+        <div style={{width: '100%', height: '100px',  background: `linear-gradient(to bottom, #7CEBF3, #7CEBF3 70%, rgba(124,235,243,0))`}}>
 
-          
+   
+          <Formik
+                initialValues={{
+                  citizenId: '',
+                }}
+                onSubmit={handleSubmit}
+              >
+          {({ isSubmitting }) => (
+            <Form>
+              <div style={{position: 'absolute', top: ' 10px', left: '10 px' , padding: '10px'}}>
+                <Field class="form-control" id="citizenId" name="citizenId" placeholder="citizenId" type="text" style={{background: '#ACE7EB',marginLeft: '5px' }}/>
+                <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', marginLeft: '5px'}}>Search</button>
+              </div>
 
-      </div>
-
-      <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
-       
+            </Form>
+          )}
+        </Formik>
+            <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
         <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
           window.location.href = '/adminPage';
         }}>Admin</button>
@@ -112,8 +154,23 @@ const [timeStamps, setTimeStamps] = useState([]);
           Cookies.remove('token');
           window.location.href = '/';
         }}>Log out</button>
+          </div>
+
+
+
+
+       </div>
+    </div> 
+
+
       
-      
+          
+
+  
+      <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+       
+        
+
       </div>
 
 
@@ -129,7 +186,7 @@ const [timeStamps, setTimeStamps] = useState([]);
 
   }
 
-  
+
 
 
 
