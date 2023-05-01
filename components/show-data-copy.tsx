@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
 import Cookies from 'js-cookie';
 import {Variables} from '../data/globalVariable';
-
+import Image from 'next/image'
+import mypic from '../pictures/logo.png'
 
 
 
@@ -117,7 +118,7 @@ function showData(citezenID?: string)
 
   return (
     <div style={{backgroundColor: '#ABE7EB'}}>
-      <div>
+      <div style={{position: 'absolute', top: '120px'}}>
         {showData().map((item, index) => (
           <div key={index}>
             <p>{item}</p>
@@ -125,9 +126,14 @@ function showData(citezenID?: string)
         ))}
       </div>
       
-      <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
-        <div style={{width: '100%', height: '100px',  background: `linear-gradient(to bottom, #7CEBF3, #7CEBF3 70%, rgba(124,235,243,0))`}}>
+      <div className="d-flex justify-content-center" style={{position: 'absolute' ,top: '80px', }}>
+          <Image src={mypic} alt="" width="250" height="60" />
+        </div>
 
+
+      <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
+        <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}>
+          
    
           <Formik
                 initialValues={{
@@ -137,9 +143,11 @@ function showData(citezenID?: string)
               >
           {({ isSubmitting }) => (
             <Form>
-              <div style={{position: 'absolute', top: ' 10px', left: '10 px' , padding: '10px'}}>
-                <Field class="form-control" id="citizenId" name="citizenId" placeholder="citizenId" type="text" style={{background: '#ACE7EB',marginLeft: '5px' }}/>
-                <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', marginLeft: '5px'}}>Search</button>
+              <div style={{position: 'absolute', top: ' 10px', left: '10 px' , padding: '10px', width: '200px'}}>
+                <Field class="form-control" id="citizenId" name="citizenId" placeholder="citizenId" type="text" style={{background: 'white',marginLeft: '5px' }}/>
+                  <div style={{position: 'absolute', top: '10px', left: '200px'}}>
+                    <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ fontSize: '12px', padding: '10px 10px', marginLeft: '5px'}}>Search</button>
+                  </div>
               </div>
 
             </Form>

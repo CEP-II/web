@@ -103,40 +103,40 @@ export default function AdminForm()
                         <h1 className="display-6 mb-3">Create user</h1>
 
                         <div className="mb-2">
-                            <Field id="password" name="password" placeholder="Password" type="password" />
+                            <Field className="form-control" id="password" name="password" placeholder="Password" type="password" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="name" name="name" placeholder="Name" />
+                            <Field className="form-control" id="name" name="name" placeholder="Name" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="email" name="email" placeholder="Email" />
+                            <Field className="form-control" id="email" name="email" placeholder="Email" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
+                            <Field className="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="birthDate" name="birthDate" placeholder="Birth Date" />
+                            <Field className="form-control" id="birthDate" name="birthDate" placeholder="Birth Date" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="city" name="city" placeholder="City" />
+                            <Field className="form-control" id="city" name="city" placeholder="City" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="street" name="street" placeholder="Street" />
+                            <Field className="form-control" id="street" name="street" placeholder="Street" />
                         </div>
 
                         <div className="mb-2">
-                            <Field id="postal" name="postal" placeholder="Postal" />
+                            <Field className="form-control" id="postal" name="postal" placeholder="Postal" />
                         </div>
 
                         <div>
                             <button type="submit" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', marginRight: '5px', width: '100px' }}  >Create User</button>
-                            <button type="button" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
+                            <button type="button" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', width: '100px' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
                         </div>
                     </Form>
                 </div>
@@ -145,11 +145,11 @@ export default function AdminForm()
             </div>
 
             <div style={{position: 'absolute', top: '15px', right: '10px', padding: '10px'}}>
-                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px', width: '100px'}} onClick={() => {
                 window.location.href = '/showData';
                 }}>data</button>
                     
-                <button type="button" className="btn btn-primary" style={{fontSize: '14px', padding: '5px 10px'}} onClick={() => {
+                <button type="button" className="btn btn-primary" style={{fontSize: '14px', padding: '5px 10px',width: '100px'}} onClick={() => {
                 Cookies.remove('token');
                 window.location.href = '/';
                 }}>Log out</button>
