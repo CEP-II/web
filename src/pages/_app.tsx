@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
 const mqtt = require('mqtt');
-const axios = require('axios');
+
 
 while(true)
 {
@@ -48,7 +48,7 @@ client.on('message', (topic, message) => {
 }
 
 
-*/
+
 
 const mqtt = require('mqtt');
 const axios = require('axios');
@@ -89,3 +89,17 @@ function connectMqtt() {
 
 connectMqtt();
 
+
+const axios = require('axios');
+
+axios.post(Variables.API_URL + '/timestamps', {
+  startTime: Date.now(),
+  endTime: Date.now(),
+  deviceId: "pi1234",
+})
+  .then(response => {
+    console.log(response.data.message);
+  })
+  .catch(error => {
+    console.error("Error is: ", error);
+  });*/

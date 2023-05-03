@@ -36,7 +36,7 @@ const [timeStamps, setTimeStamps] = useState<any[]>([]);
   useEffect(() => {  
     function fetchData() 
     {
-      axios.get(Variables.API_URL + '/timestamps?page=2&4', {
+      axios.get(Variables.API_URL + '/timestamps?page=1&4', {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
@@ -45,9 +45,8 @@ const [timeStamps, setTimeStamps] = useState<any[]>([]);
           
           //set the data in the state
           setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps]);
-
-          //skal lige testes setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps[0]]);
-          //om der skal være [0]
+          
+          
 
 
         }).catch(error => {
@@ -81,6 +80,7 @@ function showData(citezenID?: string)
         if(timeStamps[i].citizen == citezenID)
         {
           //create a string to store the data
+
           var str = `id: ${timeStamps[i].id}, startTime: ${timeStamps[i].startTime}, endTime: ${timeStamps[i].endTime}, citizen: ${timeStamps[i].citizen}`;
           //add the string to the array
           data.push(str);
@@ -100,7 +100,8 @@ function showData(citezenID?: string)
         //create a new object to store the data
         for (var i = 0; i < timeStamps.length; i++) {
           //create a string to store the data
-          var str = `id: ${timeStamps[i]._id}, startTime: ${timeStamps[i].startTime}, endTime: ${timeStamps[i].endTime}, citizen: ${timeStamps[i].citizen}`;
+         
+          var str = `id: ${timeStamps[i][i]._id}, startTime: ${timeStamps[0][i].startTime}, endTime: ${timeStamps[0][i].endTime}, citizen: ${timeStamps[0][i].citizen}`;
           //add the string to the array
           data.push(str);
         }
@@ -125,7 +126,7 @@ function showData(citezenID?: string)
   return (
     <div style={{backgroundColor: '#ABE7EB'}}>
 
-        <div style={{position: 'absolute', top: '120px'}}>
+        <div style={{position: 'absolute', top: '120px', left: '10px'}}>
           {showData().map((item, index) => (
               <div key={index}>
                 <p>{item}</p>

@@ -83,12 +83,17 @@ interface Values {
             setLoginSuccess(true);
           }, 2000);
 
+
+          //trying creating user
+          
+
         });
+        
       }
       else
       {
         console.log("citizen login");
-        axios.post(Variables.API_URL + '/citezen/login', {
+        axios.post(Variables.API_URL + '/citizen/login', {
           email: values.username,
           password: values.password
         })
@@ -144,22 +149,7 @@ interface Values {
       
 
   }
-/*
-  const CustomSwitch = ({ field, form, ...props }) => {
-    const handleChange = (value) => {
-      form.setFieldValue(field.name, value); // update field value in formik
-      //update the isAdmin state
-      console.log("isAdmin value: " + value);
-    };
-  
-    return (
-      <Switch
-        {...props}
-        checked={field.value} // pass in the field value to determine the switch position
-        onChange={handleChange} // handle switch change event and update formik field value
-      />
-    );
-  }; */
+
 
 
   return (

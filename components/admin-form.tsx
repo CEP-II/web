@@ -126,7 +126,7 @@ export default function AdminForm()
             if(noError) {
                 setPasswordMatch(true);
             } 
-            else {
+            else if(!noError) {
                 return errors;
             }
           };
