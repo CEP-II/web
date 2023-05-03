@@ -43,8 +43,11 @@ const [timeStamps, setTimeStamps] = useState<any[]>([]);
       }).then(response => 
         {
           
-          console.log(response.data.timestamps[0])
-          setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps[0]]);
+          //set the data in the state
+          setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps]);
+
+          //skal lige testes setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps[0]]);
+          //om der skal være [0]
 
 
         }).catch(error => {
