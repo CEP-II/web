@@ -42,6 +42,7 @@ const [timeStamps, setTimeStamps] = useState<any[]>([]);
         }
       }).then(response => 
         {
+          
           console.log(response.data.timestamps[0])
           setTimeStamps(timeStamps => [...timeStamps, response.data.timestamps[0]]);
 
@@ -126,9 +127,7 @@ function showData(citezenID?: string)
         ))}
       </div>
       
-      <div className="d-flex justify-content-center" style={{position: 'absolute' ,top: '80px', }}>
-          <Image src={mypic} alt="" width="250" height="60" />
-        </div>
+      
 
 
       <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
@@ -169,19 +168,6 @@ function showData(citezenID?: string)
 
        </div>
     </div> 
-
-
-      
-          
-
-  
-      <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
-       
-        
-
-      </div>
-
-
     </div>
 
 
