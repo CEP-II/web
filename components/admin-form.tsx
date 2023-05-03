@@ -20,6 +20,7 @@ interface Values {
     street : string;
     city : string;
     birthDate : string;
+    deviceId : string;
 }
 
 
@@ -69,6 +70,7 @@ export default function AdminForm()
                     name : values.name,
                     address : address,
                     birthdate : date,
+                    deviceId : values.deviceId,
                 })
                 //if the user is created successfully we get a message
                 .then(response => {console.log(response.data.message)})
@@ -171,6 +173,7 @@ export default function AdminForm()
                         street: "",
                         postal: "",
                         birthDate: "",
+                        deviceId: "",
                     }}
                     
                     onSubmit={onSubmit}
@@ -220,10 +223,16 @@ export default function AdminForm()
                             <Field className="form-control" id="postal" name="postal" placeholder="Postal" />
                         </div>
 
+                        <div className="mb-2">
+                            <Field className="form-control" id="deviceId" name="deviceId" placeholder="Device ID" />
+                        </div>
+
                         <div>
                             <button type="submit" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', marginRight: '5px', width: '100px' }}  >Create User</button>
                             <button type="button" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', width: '100px' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
                         </div>
+
+
                     </Form>
                 </div>
                 )}

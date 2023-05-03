@@ -64,7 +64,7 @@ const [timeStamps, setTimeStamps] = useState<any[]>([]);
   
  
 
-  
+//
 function showData(citezenID?: string)
   {
     //create a new array to store the data
@@ -107,25 +107,28 @@ function showData(citezenID?: string)
       return data;
     }
   }
+  showData();
+
+
+
   
 
-  showData()
 
-
-
+  //this function will handle the submit of the form
   const handleSubmit = ( values: Values , { setSubmitting }: FormikHelpers<Values>) =>{
     showData(values.citizenId);
   }
 
   return (
     <div style={{backgroundColor: '#ABE7EB'}}>
-      <div style={{position: 'absolute', top: '120px'}}>
-        {showData().map((item, index) => (
-          <div key={index}>
-            <p>{item}</p>
-          </div>
-        ))}
-      </div>
+
+        <div style={{position: 'absolute', top: '120px'}}>
+          {showData().map((item, index) => (
+              <div key={index}>
+                <p>{item}</p>
+              </div>
+          ))}
+        </div>
       
       
 
@@ -140,42 +143,33 @@ function showData(citezenID?: string)
                 }}
                 onSubmit={handleSubmit}
               >
-          {({ isSubmitting }) => (
-            <Form>
-              <div style={{position: 'absolute', top: ' 10px', left: '10 px' , padding: '10px', width: '200px'}}>
-                <Field class="form-control" id="citizenId" name="citizenId" placeholder="citizenId" type="text" style={{background: 'white',marginLeft: '5px' }}/>
-                  <div style={{position: 'absolute', top: '10px', left: '200px'}}>
-                    <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ fontSize: '12px', padding: '10px 10px', marginLeft: '5px'}}>Search</button>
-                  </div>
-              </div>
+            {({ isSubmitting }) => (
+              <Form>
+                <div style={{position: 'absolute', top: ' 10px', left: '10 px' , padding: '10px', width: '200px'}}>
+                  <Field class="form-control" id="citizenId" name="citizenId" placeholder="citizenId" type="text" style={{background: 'white',marginLeft: '5px' }}/>
+                    <div style={{position: 'absolute', top: '10px', left: '200px'}}>
+                      <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ fontSize: '12px', padding: '10px 10px', marginLeft: '5px'}}>Search</button>
+                    </div>
+                </div>
 
-            </Form>
-          )}
-        </Formik>
+              </Form>
+            )}
+          </Formik>
+
             <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
-        <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-          window.location.href = '/adminPage';
-        }}>Admin</button>
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                  window.location.href = '/adminPage';
+                }}>Admin</button>
 
-        <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
-          Cookies.remove('token');
-          window.location.href = '/';
-        }}>Log out</button>
-          </div>
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
+                  Cookies.remove('token');
+                  window.location.href = '/';
+                }}>Log out</button>
+            </div>
+        </div>
+      </div> 
 
-
-
-
-       </div>
-    </div> 
     </div>
-
-
-
-    
-
-
-
   );
 
   }
