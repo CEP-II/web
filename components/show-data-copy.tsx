@@ -5,10 +5,11 @@ import Cookies from 'js-cookie';
 import {Variables} from '../data/globalVariable';
 import Image from 'next/image'
 import mypic from '../pictures/logo.png'
+import Link from 'next/link';
+import Pagination from "react-js-pagination";
 
 
-
-
+/*
  
 interface Values{
   citizenId: string;
@@ -184,6 +185,103 @@ function showData(citezenID?: string)
 
 export default ShowData;
 
+*/
+
+
+
+const PaginatedList = () => {
+  const [data, setData] = useState([]);
+  const [activePage, setActivePage] = useState(1);
+  const [itemsPerPage] = useState(20);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    
+
+    const response = await axios.get(Variables.API_URL + '/timestamps',{
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+    });
+    setData(response.data.timestamps);
+  };
+
+  const handlePageChange = (pageNumber:any) => {
+    setActivePage(pageNumber);
+  };
+
+  const handleSearch = (event:any) => {
+    setSearchTerm(event.target.value);
+    setActivePage(1); // reset active page when search term changes
+  };
+
+
+  const indexOfLastItem = activePage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  let currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  if (searchTerm) {
+    // filter currentItems array by search term
+    currentItems = currentItems.filter(item => item.citizen.toString().includes(searchTerm));
+  }
+  
+  return (
+    <div>
+      <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
+        <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}></div>
+         <div style={{position: 'absolute' , top: '25px', left: '10px'}}>
+          <input type="text" placeholder="Search by ID" value={searchTerm} style={{ }} onChange={handleSearch} />
+          </div>
+
+          <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
+            <h1 style={{color: 'white', fontSize: '50px' }}>Night assist</h1>
+          </div>
+
+          <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                  window.location.href = '/adminPage';
+                }}>Admin</button>
+
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
+                  Cookies.remove('token');
+                  window.location.href = '/';
+                }}>Log out</button>
+            </div>
+       </div>
+
+     
+       <div style={{position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '90%'}}>
+        {/* Render list items */}
+        <ul>
+          {currentItems.map((item, index) => (
+            <li key={index}>{"ID "}{item._id} {"    Start "}{item.startTime}{"     End "}{item.endTime} {"    Citinzen "} {item.citizen} </li>
+          ))}
+        </ul>
+      
+      
+        <div style={{position: 'absolute', bottom: '-50px', left: '50%', transform: 'translateX(-50%)'}}>
+        {/* Render pagination component */}
+        <Pagination
+          activePage={activePage}
+          itemsCountPerPage={itemsPerPage}
+          totalItemsCount={data.length}
+          pageRangeDisplayed={5}
+          onChange={handlePageChange}
+          itemClass="page-item"
+          linkClass="page-link"
+        />
+        </div>
+        </div>
+      
+    </div>
+  );
+};
+
+export default PaginatedList;
 
 
 
