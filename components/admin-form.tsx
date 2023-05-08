@@ -222,55 +222,55 @@ export default function AdminForm()
                     
                 >
                 {(formikProps) => (
-                <div style={{position: 'absolute', top: '80px' , left: '0px' , padding: '15px', background: '#2da9cd', height: '100%', width: '250px'}}>
+                <div style={{position: 'absolute', top: '8%' , left: '0%' , padding: '2%px', background: '#2da9cd', height: '100%', width: '15%'}}>
 
                     <Form>
                         
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="name" name="name" placeholder="Name" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="password" name="password" placeholder="Password" type="password" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat Password" type="password" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="email" name="email" placeholder="Email" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             {/* Birthdate input */}
                             <Field className="form-control" id="birthDate" name="birthDate" type="date" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="city" name="city" placeholder="City" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="street" name="street" placeholder="Street" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="postal" name="postal" placeholder="Postal" />
                         </div>
 
-                        <div className="mb-2" style={{padding: '5px'}}>
+                        <div className="mb-2" style={{padding: '2%'}}>
                             <Field className="form-control" id="deviceId" name="deviceId" placeholder="Device ID" />
                         </div>
 
                         <div>
-                            <button type="submit" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', marginRight: '5px', width: '100px' }}  >Create User</button>
-                            <button type="button" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 10px', width: '100px' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
+                            <button type="submit" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', marginRight: '5%', width: '40%' , marginLeft: '5%'}}  >Create User</button>
+                            <button type="button" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', width: '40%' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
                         </div>
 
 
@@ -280,13 +280,14 @@ export default function AdminForm()
                 </Formik>
             </div>
 
-            <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
-                <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}>
+            <div className="mb-2" style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '8%',  background: '#1E88E4'}}>
+                
 
                 
-                    <div style={{position: 'absolute' , top: '15px', left: '20px',}}>
-                        <h1 style={{color: 'white', }}>Create user</h1>
-                    </div>
+
+                      <div className="w-full h-full" style={{position: 'absolute' , top: '4%', left: '2%',}}>
+                          <p style={{color: 'white', fontSize: '50px'}} className="text-base md:text-lg lg:text-4xl">Create user</p>
+                      </div>
             
 
                     <div style={{position: 'absolute', top: '15px', right: '10px', padding: '10px'}}>
@@ -299,11 +300,11 @@ export default function AdminForm()
                         window.location.href = '/';
                         }}>Log out</button>
                     </div>
-                </div>
+               
             </div>
               
                   
-            <div style={{position: 'absolute', left: '270px', top: '60px', width: '100%'}}>
+            <div style={{position: 'absolute', left: '15%', top: '4%', width: '100%'}}>
                     {/* Render list items */}
                     <div
                         style={{
@@ -325,22 +326,22 @@ export default function AdminForm()
                                   {"Email : "} {item.email}
                                 </div>
                                 <div>
-                                  {"Phone Number : "} {item.phoneNumber}
+                                  {"Phone Number : "} {item.phone}
                                 </div>
                                 <div>
-                                  {"Birth Date : "} {item.birthDate}
+                                  {"Birth Date : "} {item.birthdate}
                                 </div>
                                 <div>
-                                  {"Addres : "} {item.city} {" "} {item.street} {" "} {item.postal}
+                                  {"Addres : "} {item.address.city} {" "} {item.address.street} {" "} {item.address.postal}
                                 </div>
                                 <div>
                                   {"Device ID : "} {item.deviceId}
                                 </div>
                                 <div>
-                                  {"Citizen : "} {item.citizen}
+                                  {"Citizen : "} {item._id}
                                 </div>
                                 <div>
-                                  {"________________________"}
+                                  {"_____________________________________________"}
                                 </div>
 
                             </li>
