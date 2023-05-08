@@ -100,7 +100,7 @@ interface Values {
         //if the login is successful we get a token
         .then(response => {       
           //saves the token in a cookie and sets the expiration date to 10 minutes
-          Cookies.set('token', response.data.token, { expires: 1/24/6 });
+          Cookies.set('token', response.data.token, { expires: 1/24 });
 
           console.log(Cookies.get('token'));
 

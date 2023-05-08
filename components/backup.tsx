@@ -1,65 +1,3 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
-import Cookies from 'js-cookie';
-import {Variables} from '../data/globalVariable';
-import Image from 'next/image'
-import mypic from '../pictures/logo.png'
-import Link from 'next/link';
-import Pagination from "react-js-pagination";
-
-
-interface Item {
-  _id: string;
-  startTime: string;
-  endTime: string;
-  citizen: string;
-}
-
-
-const PaginatedList = () => {
-  const [data, setData] = useState([]);
-  const [activePage, setActivePage] = useState(1);
-  const [itemsPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [limit] = useState(5);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    const response = await axios.get(`${Variables.API_URL}/timestamps?page=${page}&limit=${limit}`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    }).catch(error => {
-      Cookies.remove('token');
-      window.location.href = '/';
-    });
-    setData(response.data.timestamps);
-    console.log(response.data.timestamps);
-  };
-
-  const handlePageChange = (pageNumber:any) => {
-    setPage(pageNumber);
-  };
-
-  const handleSearch = (event:any) => {
-    setSearchTerm(event.target.value);
-    setActivePage(1); // reset active page when search term changes
-  };
-
-
-  const indexOfLastItem = activePage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  let currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-  if (searchTerm) {
-    // filter currentItems array by search term
-    currentItems = currentItems.filter(item => item.citizen.toString().includes(searchTerm));
-  }
   
   return (
     <div>
@@ -90,9 +28,9 @@ const PaginatedList = () => {
         <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '0px',
-          margin: '10px auto',
+          margin: '40px auto',
           maxWidth: '95%',
         }}
       >
@@ -129,8 +67,8 @@ const PaginatedList = () => {
         <div style={{position: 'absolute', bottom: '-50px', left: '50%', transform: 'translateX(-50%)'}}>
           {/* Render pagination component */}
           <Pagination
-            activePage={page}
-            itemsCountPerPage={limit}
+            activePage={activePage}
+            itemsCountPerPage={itemsPerPage}
             totalItemsCount={data.length}
             pageRangeDisplayed={5}
             onChange={handlePageChange}
@@ -144,12 +82,3 @@ const PaginatedList = () => {
     </div>
   );
 };
-
-export default PaginatedList;
-
-
-
-
-
-//page=1&limit=10
-//page=1&
