@@ -33,9 +33,7 @@ export default function AdminForm()
 
     const createUser = (values: Values) => 
         {
-            //make a pop up window to confirm the user creation
-            if (confirm("Are you sure you want to create this user?")) 
-            {   
+           
                 const address = {
                     postal : values.postal,
                     street : values.street,
@@ -67,7 +65,6 @@ export default function AdminForm()
                     Cookies.remove('token');
                     window.location.href = '/';
                 });
-            }
             
         }
         const resetForm = (formikProps: any) => {
