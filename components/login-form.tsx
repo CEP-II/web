@@ -73,7 +73,7 @@ interface Values {
           setSubmitting(false); 
 
           // Passwords don't match, login failed
-          console.log('some error');
+          console.log('error in post request');
           //removes from the password box
           values.password = '';
           //make the password box text red for 2 seconds

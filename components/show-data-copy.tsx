@@ -127,18 +127,22 @@ const PaginatedList = () => {
           );
         })}
       </div>
-        <div style={{position: 'absolute', bottom: '-50px', left: '50%', transform: 'translateX(-50%)'}}>
-          {/* Render pagination component */}
-          <Pagination
-            activePage={page}
-            itemsCountPerPage={limit}
-            totalItemsCount={data.length}
-            pageRangeDisplayed={5}
-            onChange={handlePageChange}
-            itemClass="page-item"
-            linkClass="page-link"
-          />
-        </div>
+      <div style={{ position: 'absolute', bottom: '-50px', left: '50%', transform: 'translateX(-50%)' }}>
+  {/* Render pagination component */}
+  <Pagination
+    activePage={page}
+    itemsCountPerPage={limit}
+    totalItemsCount={data.length}
+    pageRangeDisplayed={5}
+    onChange={handlePageChange}
+    itemClass="page-item"
+    linkClass="page-link"
+    prevPageText="Previous"
+    nextPageText="Next"
+    lastPageText="Last"
+    hideFirstLastPages
+  />
+</div>
       </div>
        
       
