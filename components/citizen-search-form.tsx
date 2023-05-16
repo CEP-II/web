@@ -25,6 +25,10 @@ const MyComponent = () => {
   const [activePage, setActivePage] = useState<number>(1);
   //a state hook to hold the total number of pages
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<timeStamp | null>(null);
+
+
 
   //Set the search citizenId
     const [searchCitizen, setSearchCitizen] = useState<string>('');
@@ -64,17 +68,48 @@ const MyComponent = () => {
     setSearchCitizen(citizen);
   }
 
-  const handleNextPage = () => {
-  
-    getTimeStamps(activePage + 1, searchCitizen);
-    setActivePage(activePage + 1);
-
+  const handleItemClick = (index: number, values: timeStamp) => {
+    setSelectedItemIndex(index);
+    setSelectedItem(values);
   };
-  const handlePrevPage = () => {
-    
-    getTimeStamps(activePage - 1, searchCitizen);
-    setActivePage(activePage - 1);
-  }
+
+  const resetItemClicked = () => {
+    setSelectedItemIndex(null);
+    setSelectedItem(null);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`${Variables.API_URL}/timestamps/${selectedItem?._id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+      console.log(response);
+      getTimeStamps(activePage, searchCitizen);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+  //get citizen name to make a drop down menu for selcting citizen to get data from
+  const getCitizenName = async () => {
+    try {
+      const response = await axios.get(`${Variables.API_URL}/citizen`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+      console.log(response.data.citizens);
+      return response.data.citizens;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
 
 
 
@@ -129,52 +164,65 @@ const MyComponent = () => {
 
        </div>
 
-       <div style={{position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '100%'}}>
+       <div style={{ position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>
         {/* Render list items */}
         <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '0px',
-          margin: '10px auto',
-          maxWidth: '95%',
-        }}
-      >
-        {/* Render list items */}
-        {timeStamps.map((item, index) => {
-          const startTime = new Date(item.startTime);
-          const endTime = new Date(item.endTime);
-          const duration = Math.abs(endTime.getTime() - startTime.getTime());
-
-          return (
-            <div key={index}>
-              <div>
-                {" Start : "}{startTime.toUTCString()}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+            gap: '10px',
+            margin: '10px auto',
+            maxWidth: '95%',
+          }}
+        >
+          {/* Render list items */}
+          {timeStamps.map((item, index) => {
+            const startTime = new Date(item.startTime);
+            const endTime = new Date(item.endTime);
+            const duration = Math.abs(endTime.getTime() - startTime.getTime());
+  
+            return (
+              <div
+                key={index}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '2%',
+                  borderRadius: '10px',
+                  boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+                  cursor: 'pointer',
+                  background: selectedItemIndex === index ? '#dae1e3' : '#fff',
+                }}
+                onClick={() => {
+                  handleItemClick(index, item);
+                }}
+              >
+                <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+                <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
+                <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
+                <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
+                <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
+                <p style={{ fontSize: '14px', margin: '0px' }}>ID: {item._id}</p>
               </div>
-              <div>
-                {" Duration : "}{duration}ms
-              </div>
-              <div>
-                {"ID : "}{item._id}
-              </div>
-              <div>
-                {" DeviceID : "} {item.deviceId}
-              </div>
-              <div>
-                {"___________________________________"}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
       {/* buttons to go to next or prev page */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={handlePrevPage} disabled={activePage === 1}>Prev</button>
-          
-          {activePage}/{totalPages}
-
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={handleNextPage} disabled={activePage === totalPages}>Next</button>
-        </div>
+           {/* Pagination */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Pagination
+            activePage={activePage}
+            itemsCountPerPage={limit}
+            totalItemsCount={totalPages * limit}
+            pageRangeDisplayed={10}
+            onChange={(pageNumber) => {setActivePage(pageNumber), resetItemClicked()}}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
+        </div></div>
        
 
 

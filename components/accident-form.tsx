@@ -92,6 +92,11 @@ const MyComponent = () => {3
     window.location.reload();
 };
 
+const resetItemClicked = () => {
+    setSelectedItemIndex(null);
+    setSelectedItem(null);
+  };
+
 
 
 
@@ -158,7 +163,7 @@ const MyComponent = () => {3
               borderRadius: '10px',
               boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
               cursor: 'pointer',
-              background: selectedItemIndex === index ? '#a2eef2' : '#fff',
+              background: selectedItemIndex === index ? '#dae1e3' : '#fff',
             
             }}
               onClick={() => {handleItemClick(index, item)}}
@@ -178,17 +183,22 @@ const MyComponent = () => {3
             {/* button for deleting timestamp */}
         <button type="button" className="btn btn-primary" style={{position: 'absolute' ,left: '2%'}}  onClick={() => {handleDelete()}} disabled={selectedItem == null}>Delete</button>
         
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+
+          <Pagination
+            activePage={activePage}
+            itemsCountPerPage={limit}
+            totalItemsCount={totalPages * limit}
+            pageRangeDisplayed={10}
+            onChange={(pageNumber) => {setActivePage(pageNumber), resetItemClicked()}}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
     
 
-        {/* next button*/}
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={handlePrevPage} disabled={activePage === 1}>Prev</button>
-          
+         </div>
 
-          {activePage}/{totalPages}
-                {/* prev button */}
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={handleNextPage} disabled={activePage === totalPages}>Next</button>
-        </div>
-       
+       </div>
 
 
 
