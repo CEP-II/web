@@ -24,6 +24,12 @@ const MyComponent = () => {3
   const [activePage, setActivePage] = useState<number>(1);
   //a state hook to hold the total number of pages
   const [totalPages, setTotalPages] = useState<number>(1);
+  //a state to select an acident
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  //a state to hold the selected accident
+    const [selectedItem, setSelectedItem] = useState(null);
+
+
 
   //this determines size of page
   const limit = 20;
@@ -66,6 +72,25 @@ const MyComponent = () => {3
     getTimeStamps(activePage - 1);
     setActivePage(activePage - 1);
   }
+  
+  const handleItemClick = (index: any, values: any) => {
+    setSelectedItemIndex(index);
+    setSelectedItem(values);
+    console.log(selectedItem);
+  };
+
+    const handleDelete = async () => {
+    const response = await axios.delete(`${Variables.API_URL}/accident/${selectedItem._id}`, {
+        headers: {
+            Authorization: `Bearer ${Cookies.get('token')}`,
+            
+        },
+    }).catch(error => {
+        console.log(error);
+    });
+    console.log(response);
+    window.location.reload();
+};
 
 
 
@@ -112,7 +137,7 @@ const MyComponent = () => {3
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '0px',
+          gap: '10px',
           margin: '10px auto',
           maxWidth: '95%',
         }}
@@ -122,37 +147,45 @@ const MyComponent = () => {3
            const alarmTime = new Date(item.alarmTime);
 
           return (
-            <div key={index}>
-              <div>
-                {" Citizen : "} {item.citizen}
-              </div>
-              <div>
-                {"Time : "} {alarmTime.toUTCString()}
-                </div>
-                <div>
-                    {"position : "} {item.positionId}
-                </div>
-
-             
-              <div>
-                {"ID : "}{item._id}
-              </div>
-              <div>
-                {" DeviceID : "} {item.deviceId}
-              </div>
-              <div>
-                {"___________________________________"}
-              </div>
+            <div key={index}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '2%',
+              
+              borderRadius: '10px',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+              cursor: 'pointer',
+              background: selectedItemIndex === index ? '#a2eef2' : '#fff',
+            
+            }}
+              onClick={() => {handleItemClick(index, item)}}
+            
+            >
+              <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Time of Accidents: {alarmTime.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Possition: {item.positionId.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
+              
             </div>
           );
         })}
       </div>
       {/* buttons to go to next or prev page */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {/* button for deleting timestamp */}
+        <button type="button" className="btn btn-primary" style={{position: 'absolute' ,left: '2%'}}  onClick={() => {handleDelete()}} disabled={selectedItem == null}>Delete</button>
+        
+    
+
+        {/* next button*/}
           <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={handlePrevPage} disabled={activePage === 1}>Prev</button>
           
-          {activePage}/{totalPages}
 
+          {activePage}/{totalPages}
+                {/* prev button */}
           <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={handleNextPage} disabled={activePage === totalPages}>Next</button>
         </div>
        

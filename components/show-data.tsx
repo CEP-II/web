@@ -24,6 +24,13 @@ const MyComponent = () => {3
   const [activePage, setActivePage] = useState<number>(1);
   //a state hook to hold the total number of pages
   const [totalPages, setTotalPages] = useState<number>(1);
+  //a state to select an acident
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  //a state to hold the selected accident
+  const [selectedItem, setSelectedItem] = useState(null);
+  //a state to hold inputPage
+  const [inputPage, setInputPage, reset] = useState<number>(1);
+
 
   //this determines size of page
   const limit = 20;
@@ -32,9 +39,11 @@ const MyComponent = () => {3
     getTimeStamps(activePage);
   }, [activePage]);
 
+
+
   //this function will get one page of timeStamps from the backend
   const getTimeStamps = async (pageNumber: number) => {
-    console.log("calling");
+    console.log("calling page number: " + pageNumber);
     const response = await axios.get(`${Variables.API_URL}/timestamps?page=${pageNumber}&limit=${limit}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
@@ -50,14 +59,18 @@ const MyComponent = () => {3
     
   };
 
-  //this function will handle search for a specific citizen
-  const handleSearch = async (citizen: string) => {
-  }
+  
 
   const handleNextPage = () => {
-  
+    console.log("handling next page:" + activePage +1 );
+
+    var nextPage = activePage + 1;
+    console.log("next page: " + nextPage + "last page was " + activePage);
     getTimeStamps(activePage + 1);
     setActivePage(activePage + 1);
+
+    
+  
 
   };
   const handlePrevPage = () => {
@@ -65,6 +78,39 @@ const MyComponent = () => {3
     getTimeStamps(activePage - 1);
     setActivePage(activePage - 1);
   }
+
+  const handleItemClick = (index: any, values: any) => {
+    setSelectedItemIndex(index);
+    setSelectedItem(values);
+  };
+
+  const handleDelete = async () => {
+    const response = await axios.delete(`${Variables.API_URL}/timestamps/${selectedItem._id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    }).catch(error => {
+      console.log(error);
+    });
+    console.log(response);
+    getTimeStamps(activePage);
+  };
+
+  const handlePageInput = (e: number) => {
+    setInputPage(e);
+  }
+
+  const handleGoToPage = () => {
+    if (inputPage > totalPages || inputPage <1) {
+      setInputPage(activePage);
+      return;
+    }
+    getTimeStamps(inputPage);
+    setActivePage(inputPage);
+
+    console.log("input page is:" + inputPage);
+  }
+
 
 
 
@@ -112,7 +158,7 @@ const MyComponent = () => {3
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '0px',
+          gap: '10px',
           margin: '10px auto',
           maxWidth: '95%',
         }}
@@ -124,32 +170,46 @@ const MyComponent = () => {3
           const duration = Math.abs(endTime.getTime() - startTime.getTime());
 
           return (
-            <div key={index}>
-              <div>
-                {" Citizen : "} {item.citizen}
-              </div>
-              <div>
-                {" Start : "}{startTime.toUTCString()}
-              </div>
-              <div>
-                {" Duration : "}{duration}ms
-              </div>
-              <div>
-                {"ID : "}{item._id}
-              </div>
-              <div>
-                {" DeviceID : "} {item.deviceId}
-              </div>
-              <div>
-                {"___________________________________"}
-              </div>
+            <div key={index}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '2%',
+              
+              borderRadius: '10px',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+              cursor: 'pointer',
+              background: selectedItemIndex === index ? '#a2eef2' : '#fff',}}
+              onClick={() => {handleItemClick(index, item)}}
+            
+            
+            
+            
+            >
+              <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>ID: {item._id}</p>
+              
             </div>
           );
         })}
       </div>
       {/* buttons to go to next or prev page */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={handlePrevPage} disabled={activePage === 1}>Prev</button>
+          <div style={{position: 'absolute' ,left: '2%'}}>
+        <button type="button" className="btn btn-primary" style={{padding: '2%'}}  onClick={() => {handleDelete()}} disabled={selectedItem == null}>Delete</button>
+        
+        <input type="number" placeholder='Page number' value={inputPage} onChange={handlePageInput} />
+
+        <button type="button" className="btn btn-primary" style={{padding: '2%'}} onClick={() => {handleGoToPage()}}>Go to page</button>
+
+        </div>
+          <button type="button" className="btn btn-primary" tyle={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={handlePrevPage} disabled={activePage === 1}>Prev</button>
           
           {activePage}/{totalPages}
 

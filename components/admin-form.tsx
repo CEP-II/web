@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import '../components/admin-form.module.css'
 import { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
+import { get } from "http";
 
 
 
@@ -61,7 +62,7 @@ export default function AdminForm()
                     deviceId : values.deviceId,
                 })
                 //if the user is created successfully we get a message
-                .then(response => {console.log("eroor comes in response") , console.log(response.data.message), fetchData()})
+                .then(response => {fetchData(),console.log("eroor comes in response") , console.log(response.data.message), fetchData()})
                 .catch(error => {
            
                 });
@@ -172,15 +173,36 @@ export default function AdminForm()
             
           }
 
-              
-          
+          function getBrowserResolutionWidth() {
+            if (typeof window !== 'undefined') {
+              return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            }
+            return null;
+          }
 
+          var browserWidth = getBrowserResolutionWidth();
 
+          var limit = 16
 
+          const setLimit = () => {
+            if(browserWidth < 1100) {
+              limit = 4;}
+           
+            else if(browserWidth < 1350) {
+              limit = 6;
+            }
+            else if(browserWidth < 1600) {
+              limit = 9;
+            }
+
+          }
+          setLimit(); 
+
+            console.log("limit:" + limit + "browserWidth:" + browserWidth);
 
           const [data, setData] = useState([]);
           const [activePage, setActivePage] = useState(1);
-          const [itemsPerPage] = useState(6);
+          const [itemsPerPage] = useState(limit);
           const [searchTerm, setSearchTerm] = useState('');
           const [formikProps, setFormikProps] = useState(null);
 
@@ -264,21 +286,21 @@ export default function AdminForm()
                     </div>
           
 
-                  <div style={{position: 'absolute', top: '15px', right: '10px', padding: '10px'}}>
+                  <div style={{position: 'absolute', top: '25%' ,right: '2%'}}>
 
-                      <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '100%', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
                       window.location.href = '/accidentPage';
                       }}>Accidents</button>
 
-                      <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '100%', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
                       window.location.href = '/citizenSearch';
                       }}>Citizen</button>
 
-                      <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '100%', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
                       window.location.href = '/showData';
-                      }}>data</button>
+                      }}>Data</button>
                           
-                      <button type="button" className="btn btn-primary" style={{fontSize: '14px', padding: '5px 10px',width: '100px'}} onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{fontSize: '100%', padding: '5px 10px'}} onClick={() => {
                       Cookies.remove('token');
                       window.location.href = '/';
                       }}>Log out</button>
@@ -420,19 +442,23 @@ export default function AdminForm()
                                     }}
                                     onClick={() => handleItemClick(item, formikProps )}
                                   >
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.citizen}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.name}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.email}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.phone}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{birthDate.toUTCString()}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.city} {item.address.postal}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.street}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>device: {item.deviceId}</p>
-                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>id: {item._id}</p>
+                                      <style>{`.item-container p {margin: 1px ; /* Adjust the margin value as needed */
+      }
+    `}</style>
 
-                                    
-
-                                  </div>)
+    <div className="item-container">
+      <p style={{ fontSize: '100%', fontWeight: 'bold', color: '#1E88E4' }}>{item.citizen}</p>
+      <p style={{ fontSize: '100%', fontWeight: 'bold', color: '#1E88E4' }}>{item.name}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>{item.email}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>{item.phone}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>{birthDate.toUTCString()}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>{item.address.city} {item.address.postal}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>{item.address.street}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>device: {item.deviceId}</p>
+      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1E88E4' }}>id: {item._id}</p>
+    </div>
+  </div>
+);
 
                               }
                               
