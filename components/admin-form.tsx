@@ -22,6 +22,7 @@ interface Values {
     city : string;
     birthDate : string;
     deviceId : string;
+   
 }
 
 
@@ -60,10 +61,9 @@ export default function AdminForm()
                     deviceId : values.deviceId,
                 })
                 //if the user is created successfully we get a message
-                .then(response => {console.log("eroor comes in response") , console.log(response.data.message)})
+                .then(response => {console.log("eroor comes in response") , console.log(response.data.message), fetchData()})
                 .catch(error => {
-                    Cookies.remove('token');
-                    window.location.href = '/';
+           
                 });
             
         }
@@ -141,6 +141,38 @@ export default function AdminForm()
             alert(JSON.stringify(errors, null, 2));
             }
           };
+
+          const deleteUser = (id: string) => {
+            axios.delete(Variables.API_URL + '/citizen/' + id, {
+              headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`,
+              }
+            }).then(response => {
+              console.log(response.data.message);
+              fetchData();
+            }).catch(error => {
+             
+            });
+          };
+
+          const updateUser = (values: any) => {
+            //first we delete the user
+            console.log("values.id:" + values.id);
+ 
+
+           deleteUser(values.id);
+            //then we create a new user with the same id
+           createUser(values)
+
+          
+
+
+        
+
+            
+          }
+
+              
           
 
 
@@ -148,8 +180,9 @@ export default function AdminForm()
 
           const [data, setData] = useState([]);
           const [activePage, setActivePage] = useState(1);
-          const [itemsPerPage] = useState(20);
+          const [itemsPerPage] = useState(4);
           const [searchTerm, setSearchTerm] = useState('');
+          const [formikProps, setFormikProps] = useState(null);
 
 
           useEffect(() => {
@@ -195,177 +228,248 @@ export default function AdminForm()
             // filter currentItems array by search term
             currentItems = currentItems.filter(item => item.citizen.toString().includes(searchTerm));
           }
-          
-    return (
-        <div>
-                
-            <div>
-                <Formik
-                    initialValues={{
-                        password: "",
-                        passwordRepeat: "",
-                        phoneNumber: "",
-                        email: "",
-                        name: "",
-                        city: "",
-                        street: "",
-                        postal: "",
-                        birthDate: "",
-                        deviceId: "",
-                    }}
-                    
-                    onSubmit={onSubmit}
-                    
-                    
-                >
-                {(formikProps) => (
-                <div style={{position: 'absolute', top: '8%' , left: '0%' , padding: '2%px', background: '#2da9cd', height: '100%', width: '15%'}}>
+          const handleItemClick = (item:any, values : FormikHelpers<Values> ) => {
+            //fill in the form with the data of the user that is clicked
+            console.log(item);
+            values.setFieldValue('name', item.name);
+            values.setFieldValue('email', item.email);
+            values.setFieldValue('phoneNumber', item.phone);
+            values.setFieldValue('birthDate', item.birthdate);
+            values.setFieldValue('deviceId', item.deviceId);
+            values.setFieldValue('city', item.address.city);
+            values.setFieldValue('street', item.address.street);
+            values.setFieldValue('postal', item.address.postal);
+            values.setFieldValue('password', item.password);
+            values.setFieldValue('passwordRepeat', item.password);
+            values.setFieldValue('id', item._id);
+            
+          };
+            
+        
 
-                    <Form>
-                        
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="name" name="name" placeholder="Name" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="password" name="password" placeholder="Password" type="password" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat Password" type="password" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="email" name="email" placeholder="Email" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            {/* Birthdate input */}
-                            <Field className="form-control" id="birthDate" name="birthDate" type="date" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="city" name="city" placeholder="City" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="street" name="street" placeholder="Street" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="postal" name="postal" placeholder="Postal" />
-                        </div>
-
-                        <div className="mb-2" style={{padding: '2%'}}>
-                            <Field className="form-control" id="deviceId" name="deviceId" placeholder="Device ID" />
-                        </div>
-
-                        <div>
-                            <button type="submit" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', marginRight: '5%', width: '40%' , marginLeft: '5%'}}  >Create User</button>
-                            <button type="button" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', width: '40%' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
-                        </div>
-
-
-                    </Form>
-                </div>
-                )}
-                </Formik>
-            </div>
-
-            <div className="mb-2" style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '8%',  background: '#1E88E4'}}>
-                
-
-                
-
-                      <div className="w-full h-full" style={{position: 'absolute' , top: '4%', left: '2%',}}>
-                          <p style={{color: 'white', fontSize: '50px'}} className="text-base md:text-lg lg:text-4xl">Create user</p>
-                      </div>
             
 
-                    <div style={{position: 'absolute', top: '15px', right: '10px', padding: '10px'}}>
-                        <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px', width: '100px'}} onClick={() => {
-                        window.location.href = '/showData';
-                        }}>data</button>
-                            
-                        <button type="button" className="btn btn-primary" style={{fontSize: '14px', padding: '5px 10px',width: '100px'}} onClick={() => {
-                        Cookies.remove('token');
-                        window.location.href = '/';
-                        }}>Log out</button>
-                    </div>
-               
-            </div>
-              
-                  
-            <div style={{position: 'absolute', left: '15%', top: '4%', width: '100%'}}>
-                    {/* Render list items */}
-                    <div
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                          gap: '10px',
-                          margin: '40px auto',
-                          maxWidth: '95%',
-                        }}
-                      >
-                        {currentItems.map((item, index) => {
-                          const birthDate = new Date(item.birthdate);
-                          return (
-                            <div
+        
+         
 
-                              key={index}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                padding: '20px',
-                                background: '#fff',
-                                borderRadius: '10px',
-                                boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-                              }}
-                            >
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.citizen}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.name}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.email}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.phone}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{birthDate.toISOString}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.city}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.street}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.postal}</p>
-                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.deviceId}</p>
+          
+    return (
+    <div>
+
+        <div  style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '8%',  background: '#1E88E4'}}>
+                    
+
+                    <div className="w-full h-full" style={{position: 'absolute' , top: '4%', left: '1%',}}>
+                        <p style={{color: 'white', fontSize: '40px'}} className="text-base md:text-lg lg:text-4xl">Create user</p>
+                    </div>
+          
+
+                  <div style={{position: 'absolute', top: '15px', right: '10px', padding: '10px'}}>
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px', width: '100px'}} onClick={() => {
+                      window.location.href = '/showData';
+                      }}>data</button>
+                          
+                      <button type="button" className="btn btn-primary" style={{fontSize: '14px', padding: '5px 10px',width: '100px'}} onClick={() => {
+                      Cookies.remove('token');
+                      window.location.href = '/';
+                      }}>Log out</button>
+                  </div>
+            
+          </div>
+
+          <div className="mb-2" style={{position:'absolute', top:'8%' , left: '0%', width: '100%', height: '92%'}}>
+                      
+            
+                      <Formik
+                          initialValues={{
+                              password: "",
+                              passwordRepeat: "",
+                              phoneNumber: "",
+                              email: "",
+                              name: "",
+                              city: "",
+                              street: "",
+                              postal: "",
+                              birthDate: "",
+                              deviceId: "",
+                              id: ""
+                          }}
+
+
+
+
+
+                          //a function that can set values in the form
+                          //used to set the values of the form when a user is clicked
+                      
+                        
+
+                          
+
+
+                          onSubmit={onSubmit}
+
+                          
+                          
+                      >
+                      {(formikProps) => (
+                      
+
+                      <Form>
+
+                      <div style={{position: 'absolute', top: '0%' , left: '0%', background: '#2da9cd', height: '100%', width: '15%'}}>
                               
 
-                            </div>)
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="name" name="name" placeholder="Name" />
+                              </div>
 
-                        }
-                        
-                        )}
-                        
-                       
-                        
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="password" name="password" placeholder="Password" type="password" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat Password" type="password" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="email" name="email" placeholder="Email" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  {/* Birthdate input */}
+                                  <Field className="form-control" id="birthDate" name="birthDate" type="date" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="city" name="city" placeholder="City" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="street" name="street" placeholder="Street" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="postal" name="postal" placeholder="Postal" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="deviceId" name="deviceId" placeholder="Device ID" />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="id" name="id" placeholder="ID" />
+                              </div>
+
+                              <div>
+                                  <button type="submit" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', marginRight: '5%', width: '40%' , marginLeft: '5%'}}  >Create User</button>
+                                  <button type="button" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', width: '40%' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
+                              </div>
+                              <div>
+                                  <button type="button" className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', width: '40%', marginRight: '5%', marginLeft: '5%' , marginTop: '5%'}} onClick={() => {deleteUser(formikProps.values.id); resetForm(formikProps);}}>Delete User</button>
+                                  <button type="button"  className="btn btn-primary" style={{ fontSize: '70%', padding: '5% 10%', width: '40%', marginTop: '5%'}} onClick={() => {updateUser(formikProps.values); resetForm(formikProps);}}>Update User</button>
+                              </div>
                       </div>
-      
+                        
+
+
+                          <div style={{position: 'absolute', top: '0%' , left: '15%', background: '#fff', height: '100%', width: '85%'}}>
+                          {/* Render list items */}
+                          <div
+                              style={{
+                                
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                gap: '10px',
+                                margin: '10px auto',
+                                maxWidth: '95%',
+                              }}
+                            >
+                              {currentItems.map((item, index) => {
+                                const birthDate = new Date(item.birthdate);
+                                
+                                return (
+                                  <div
+
+                                    key={index}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      padding: '0px',
+                                      background: '#fff',
+                                      borderRadius: '10px',
+                                      boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+                                      cursor: 'pointer',
+                                    }}
+                                    onClick={() => handleItemClick(item, formikProps )}
+                                  >
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.citizen}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.name}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.email}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.phone}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{birthDate.toUTCString()}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.city} {item.address.postal}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.street}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.deviceId}</p>
+                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item._id}</p>
+
+                                    
+
+                                  </div>)
+
+                              }
+                              
+                              )}
+
+                          <div style={{position: 'absolute', bottom: '0%', left: '50%', transform: 'translateX(-50%)'}}>
+                            {/* Render pagination component */}
+                                    <Pagination
+                                      activePage={activePage}
+                                      itemsCountPerPage={itemsPerPage}
+                                      totalItemsCount={data.length}
+                                      pageRangeDisplayed={5}
+                                      onChange={handlePageChange}
+                                      itemClass="page-item"
+                                      linkClass="page-link"
+                                    />
+                            </div>
+                              
+                            
+                              
+                            </div>
+
+                        </div>
+                        
+            
+
+                              
+                          </Form>
+
+
+
+                      
+                      )}
+
+                      </Formik>
+                
+
         
-                      <div style={{position: 'absolute', bottom: '-50px', left: '50%', transform: 'translateX(-50%)'}}>
-                      {/* Render pagination component */}
-                              <Pagination
-                                activePage={activePage}
-                                itemsCountPerPage={itemsPerPage}
-                                totalItemsCount={data.length}
-                                pageRangeDisplayed={5}
-                                onChange={handlePageChange}
-                                itemClass="page-item"
-                                linkClass="page-link"
-                              />
-                      </div>
-                  </div>
-        </div>
+                    
+                        
+                  
+                              
+                          
+                        
+          </div>
+    </div>
         
     )
-}
+};
+
    

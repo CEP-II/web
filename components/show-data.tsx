@@ -34,6 +34,7 @@ const MyComponent = () => {3
 
   //this function will get one page of timeStamps from the backend
   const getTimeStamps = async (pageNumber: number) => {
+    console.log("calling");
     const response = await axios.get(`${Variables.API_URL}/timestamps?page=${pageNumber}&limit=${limit}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
@@ -44,6 +45,7 @@ const MyComponent = () => {3
     });
     setTimeStamps(response.data.timestamps);
     setTotalPages(response.data.totalPages);
+    console.log(response.data.timestamps);
     
     
   };
@@ -121,7 +123,7 @@ const MyComponent = () => {3
                 {" Citizen : "} {item.citizen}
               </div>
               <div>
-                {" Start : "}{startTime.toISOString()}
+                {" Start : "}{startTime.toUTCString()}
               </div>
               <div>
                 {" Duration : "}{duration}ms

@@ -44,13 +44,14 @@ const MyComponent = () => {
         Authorization: `Bearer ${Cookies.get('token')}`,
       },
     })
+    console.log(response.data.timestamps);
+    setTimeStamps(response.data.timestamps);
+    setTotalPages(response.data.totalPages);
     }catch(error){
         return;
     }
 
-    console.log(response.data.timestamps);
-    setTimeStamps(response.data.timestamps);
-    setTotalPages(response.data.totalPages);
+    
     
    
     
@@ -139,7 +140,7 @@ const MyComponent = () => {
           return (
             <div key={index}>
               <div>
-                {" Start : "}{startTime.toISOString()}
+                {" Start : "}{startTime.toUTCString()}
               </div>
               <div>
                 {" Duration : "}{duration}ms
