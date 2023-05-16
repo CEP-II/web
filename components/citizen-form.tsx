@@ -1,14 +1,10 @@
 import axios from 'axios';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Variables } from '../data/globalVariable';
 import Pagination from 'react-js-pagination';
 
-
-
-interface timeStamp
-{
-
+interface timeStamp {
   _id: string;
   startTime: string;
   endTime: string;
@@ -17,136 +13,219 @@ interface timeStamp
 }
 
 const MyComponent = () => {
-  //a state hook to hold timeStamps
-  const [timeStamps, setTimeStamps] = useState([]);
-  //a state hook to hold the current page number
-  const [activePage, setActivePage] = useState<number>(1);
-  //a state hook to hold the total number of pages
-  const [totalPages, setTotalPages] = useState<number>(1);
 
-  //this determines size of page
+  //timestamp
+
+
+  const [timeStamps, setTimeStamps] = useState<timeStamp[]>([]);
+  const [activePage, setActivePage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<timeStamp | null>(null);
   const limit = 20;
 
   useEffect(() => {
     getTimeStamps(activePage);
   }, [activePage]);
 
-  //this function will get one page of timeStamps from the backend
   const getTimeStamps = async (pageNumber: number) => {
-    const response = await axios.get(`${Variables.API_URL}/timestamps/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    }).catch(error => {
-      Cookies.remove('token');
-      window.location.href = '/';
-    });
-    setTimeStamps(response.data.timestamps);
-    setTotalPages(response.data.totalPages);
-    
+    try {
+      const response = await axios.get(`${Variables.API_URL}/timestamps/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+      setTimeStamps(response.data.timestamps);
+      setTotalPages(response.data.totalPages);
+     
+
+    } catch (error) {
    
-    
-    
+      
+    }
   };
 
-  //this function will handle search for a specific citizen
-  const handleSearch = async (citizen: string) => {
-  }
-
-  const handleNextPage = () => {
-  
-    getTimeStamps(activePage + 1);
-    setActivePage(activePage + 1);
-
+  const handleItemClick = (index: number, values: timeStamp) => {
+    setSelectedItemIndex(index);
+    setSelectedItem(values);
   };
-  const handlePrevPage = () => {
-    
-    getTimeStamps(activePage - 1);
-    setActivePage(activePage - 1);
-  }
+
+  const resetItemClicked = () => {
+    setSelectedItemIndex(null);
+    setSelectedItem(null);
+  };
+
+  //accidents
+  const [accidents, setAccidents] = useState([]);
+  const [activePageAccidents, setActivePageAccidents] = useState<number>(1);
+  const [totalPagesAccidents, setTotalPagesAccidents] = useState<number>(1);
+
+  useEffect(() => {
+    getAccidents(activePageAccidents);
+  }, [activePageAccidents]);
+
+  const getAccidents = async (pageNumber: number) => {
+    try {
+      const response = await axios.get(`${Variables.API_URL}/accidents/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+      setAccidents(response.data.accidents);
+      setTotalPagesAccidents(response.data.totalPages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
+
+
+
+ 
 
 
   return (
     <div>
-      <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
-        <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}></div>
-         <div style={{position: 'absolute' , top: '25px', left: '10px'}}>
-          {/*<input type="text" placeholder="Search by ID" value={searchTerm} style={{ }} onChange={handleSearch} />*/}
-          </div>
+      <div  style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '12%',  background: '#1E88E4'}}>
+        <h1 style={{textAlign: 'center', color: 'white', fontWeight: 'bold'}}>Night Assist</h1>
+        <h3 style={{textAlign: 'center', color: 'white', fontSize:'100%'}}>Your Guide through the night</h3>
+      
 
-          <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
-            <h1 style={{color: 'white', fontSize: '50px' }}>Night assist</h1>
-          </div>
+      {/* button to log out */}
+      <button className="btn btn-primary" style={{position: 'absolute', top: '30%', right: '3%', height: '40%'}} onClick={() => {
+        Cookies.remove('token');
+        Cookies.remove('citizenId');
+        window.location.href = '/';
+      }}>Log out</button>
+      </div>
 
-          <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
-               
-
-                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
-                  Cookies.remove('token');
-                  window.location.href = '/';
-                }}>Log out</button>
+     
+  
+          <div style={{ position: 'absolute', top: '14%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
+            {/* Render list items */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+                gap: '10px',
+                margin: '10px auto',
+                maxWidth: '95%',
+              }}
+            >
+              {/* Render list items */}
+              {timeStamps.map((item, index) => {
+                const startTime = new Date(item.startTime);
+                const endTime = new Date(item.endTime);
+                const duration = Math.abs(endTime.getTime() - startTime.getTime());
+      
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: '2%',
+                      borderRadius: '10px',
+                      boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+                      cursor: 'pointer',
+                      background: selectedItemIndex === index ? '#dae1e3' : '#fff',
+                    }}
+                    onClick={() => {
+                      handleItemClick(index, item);
+                    }}
+                  >
+                    <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+                    <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
+                    <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
+                    <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
+                    <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
+                    <p style={{ fontSize: '14px', margin: '0px' }}>ID: {item._id}</p>
+                  </div>
+                );
+              })}
             </div>
-          
+      
+      
+            {/* Pagination */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+              <Pagination
+                activePage={activePage}
+                itemsCountPerPage={limit}
+                totalItemsCount={totalPages * limit}
+                pageRangeDisplayed={10}
+                onChange={(pageNumber) => {setActivePage(pageNumber), resetItemClicked()}}
+                itemClass="page-item"
+                linkClass="page-link"
+              />
+            </div>
+          </div>
 
-       </div>
 
-       <div style={{position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '100%'}}>
-        {/* Render list items */}
-        <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '0px',
-          margin: '10px auto',
-          maxWidth: '95%',
-        }}
-      >
-        {/* Render list items */}
-        {timeStamps.map((item, index) => {
-          const startTime = new Date(item.startTime);
-          const endTime = new Date(item.endTime);
-          const duration = Math.abs(endTime.getTime() - startTime.getTime());
+          <div style={{ position: 'absolute', top: '90%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
+            {/* Render list items */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+                gap: '10px',
+                margin: '10px auto',
+                maxWidth: '95%',
+              }}
+            >
+              {/* Render list items */}
+              {accidents.map((item, index) => {
+           const alarmTime = new Date(item.alarmTime);
 
           return (
-            <div key={index}>
-              <div>
-                {" Start : "}{startTime.toISOString()}
-              </div>
-              <div>
-                {" Duration : "}{duration}ms
-              </div>
-              <div>
-                {"ID : "}{item._id}
-              </div>
-              <div>
-                {" DeviceID : "} {item.deviceId}
-              </div>
-              <div>
-                {"___________________________________"}
-              </div>
+            <div key={index}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '2%',
+              
+              borderRadius: '10px',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+              cursor: 'pointer',
+              background: selectedItemIndex === index ? '#dae1e3' : '#fff',
+            
+            }}
+              onClick={() => {handleItemClick(index, item)}}
+            
+            >
+              <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Time of Accidents: {alarmTime.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Possition: {item.positionId.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
+              
             </div>
           );
         })}
-      </div>
-      {/* buttons to go to next or prev page */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={handlePrevPage} disabled={activePage === 1}>Prev</button>
-          
-          {activePage}/{totalPages}
-
-          <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={handleNextPage} disabled={activePage === totalPages}>Next</button>
-        </div>
-       
-
-
-
-       
-        
-  </div>
-</div>
-)};
+            </div>
+      
+      
+            {/* Pagination */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+              <Pagination
+                activePage={activePageAccidents}
+                itemsCountPerPage={limit}
+                totalItemsCount={totalPagesAccidents * limit}
+                pageRangeDisplayed={10}
+                onChange={(pageNumber) => {setActivePageAccidents(pageNumber), resetItemClicked()}}
+                itemClass="page-item"
+                linkClass="page-link"
+              />
+            </div>
+          </div>
+    </div>
+  );
+  
+  };
 export default MyComponent;
+  
   
 

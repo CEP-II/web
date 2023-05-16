@@ -57,21 +57,7 @@ const MyComponent = () => {3
     
   };
 
-  //this function will handle search for a specific citizen
-  const handleSearch = async (citizen: string) => {
-  }
-
-  const handleNextPage = () => {
   
-    getTimeStamps(activePage + 1);
-    setActivePage(activePage + 1);
-
-  };
-  const handlePrevPage = () => {
-    
-    getTimeStamps(activePage - 1);
-    setActivePage(activePage - 1);
-  }
   
   const handleItemClick = (index: any, values: any) => {
     setSelectedItemIndex(index);
