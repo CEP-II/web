@@ -9,106 +9,69 @@ interface Item {
   startTime: string;
   endTime: string;
   citizen: string;
+  deviceId: string;
 }
 
 const PaginatedList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState<Item[]>([]);
-  const [activePage, setActivePage] = useState(1);
   const [itemsPerPage] = useState(20);
-  const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPageData, setCurrentPageData] = useState<Item[]>([]);
-  const [loadedPages, setLoadedPages] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetchData(1);
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   const fetchData = async (page: number) => {
-    if (loadedPages.includes(page)) {
-      setCurrentPageData(getDataForPage(page));
-      return;
-    }
-
-    const response = await axios.get(`${Variables.API_URL}/timestamps?page=${page}&limit=20`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    }).catch(error => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${Variables.API_URL}/timestamps?page=${page}&limit=${itemsPerPage}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+  
+      const newData = response.data.timestamps;
+      console.log("calling api for page " + page);
+      console.log(newData);
+      setData(prevData => {
+        const updatedData = [...prevData, ...newData];
+        // Remove earlier pages
+        const startIndex = Math.max(0, updatedData.length - (itemsPerPage * 3));
+        const limitedData = updatedData.slice(startIndex);
+        console.log(limitedData.length);
+        return limitedData;
+      });
+    } catch (error) {
       Cookies.remove('token');
       window.location.href = '/';
-    });
-
-    const newData = response.data.timestamps;
-    console.log("calling api for " + page)
-    console.log(newData);
-    setData(prevData => [...prevData, ...newData]);
-    setTotalItems(prevTotalItems => prevTotalItems + newData.length);
-    setLoadedPages(prevLoadedPages => [...prevLoadedPages, page]);
-    setCurrentPageData(getDataForPage(page));
-
-  };
-
-  const getDataForPage = (page: number): Item[] => {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return data.slice(startIndex, endIndex);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePageChange = (pageNumber: number) => {
-    setActivePage(pageNumber);
-    if (!loadedPages.includes(pageNumber)) {
-      fetchData(pageNumber);
-    } else {
-      setCurrentPageData(getDataForPage(pageNumber));
+    if (pageNumber !== currentPage) {
+      setCurrentPage(pageNumber);
     }
+   
   };
-
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-    setActivePage(1);
+    setCurrentPage(1);
   };
 
   const filteredData = data.filter(item => item.citizen.includes(searchTerm));
 
   return (
     <div>
+      <div style={{ margin: '10px' }}>
+        <input type="text" placeholder="Search by Citizen ID" value={searchTerm} onChange={handleSearch} />
+      </div>
 
-<div className="mb-2" style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '8%',  background: '#1E88E4'}}>
-                
-
-            <div style={{position: 'absolute', top: '20%' , left: '2%'}}>
-                    <input type="text" placeholder="Search by Citizen ID" value={searchTerm} onChange={handleSearch} />
-            </div>
-      
-
-              <div style={{position: 'absolute', top: '0%', right: '1%', padding: '1%'}}>
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '100%', padding: '5px 10px', marginRight: '5px', width: '100px'}} onClick={() => {
-                  window.location.href = '/adminPage';
-                  }}>admin</button>
-                      
-                  <button type="button" className="btn btn-primary" style={{fontSize: '100%', padding: '5px 10px',width: '100px'}} onClick={() => {
-                  Cookies.remove('token');
-                  window.location.href = '/';
-                  }}>Log out</button>
-              </div>
-
-              <div style={{position: 'absolute', top: '20%' , left: '50%', transform: 'translateX(-50%)'}}>
-                <Pagination
-                  activePage={activePage}
-                  itemsCountPerPage={itemsPerPage}
-                  totalItemsCount={filteredData.length}
-                  pageRangeDisplayed={5}
-                  onChange={handlePageChange}
-                  itemClass="page-item"
-                  linkClass="page-link"
-                />
-              </div>
-         
-  </div>
-
-      
+      {isLoading && <div>Loading...</div>}
 
       <div style={{position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '100%'}}>
         {/* Render list items */}
@@ -122,7 +85,7 @@ const PaginatedList = () => {
         }}
       >
         {/* Render list items */}
-        {currentPageData.map((item, index) => {
+        {filteredData.map((item, index) => {
           const startTime = new Date(item.startTime);
           const endTime = new Date(item.endTime);
           const duration = Math.abs(endTime.getTime() - startTime.getTime());
@@ -153,7 +116,18 @@ const PaginatedList = () => {
       </div>
       </div>
 
-      
+      <div style={{ marginTop: '10px' }}>
+        <Pagination
+          activePage={currentPage}
+          itemsCountPerPage={itemsPerPage}
+          totalItemsCount={data.length}
+
+          pageRangeDisplayed={5}
+          onChange={handlePageChange}
+          itemClass="page-item"
+          linkClass="page-link"
+        />
+      </div>
     </div>
   );
 };

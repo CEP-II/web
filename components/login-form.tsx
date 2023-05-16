@@ -101,8 +101,9 @@ interface Values {
         .then(response => {       
           //saves the token in a cookie and sets the expiration date to 10 minutes
           Cookies.set('token', response.data.token, { expires: 1/24 });
+          console.log(response.data);
 
-          console.log(Cookies.get('token'));
+         
 
           //if we get a token we set the loginSuccess state to true
           if (response.data.token) {
@@ -111,7 +112,7 @@ interface Values {
             
             setLoginSuccess(true);
             //redirect to the showData page
-            window.location.href = '/showData';
+            window.location.href = '/citizenPage';
             
           } 
           else {
