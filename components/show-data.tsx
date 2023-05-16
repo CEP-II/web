@@ -79,9 +79,15 @@ const MyComponent = () => {3
 
           <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
             <h1 style={{color: 'white', fontSize: '50px' }}>Night assist</h1>
+           
           </div>
 
           <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+
+              <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+              window.location.href = '/accidentPage';
+              }}>Accidents</button>
+
                 <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
                   window.location.href = '/citizenSearch';
                 }}>Citizen</button>

@@ -3,7 +3,7 @@ import { use, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Variables } from '../data/globalVariable';
 import Pagination from 'react-js-pagination';
-
+import { get } from 'http';
 
 
 interface timeStamp
@@ -11,14 +11,13 @@ interface timeStamp
 
   _id: string;
   startTime: string;
+
   endTime: string;
   citizen: string;
   deviceId: string;
 }
 
-
-
-const MyComponent = () => {
+const MyComponent = () => {3
   //a state hook to hold timeStamps
   const [timeStamps, setTimeStamps] = useState([]);
   //a state hook to hold the current page number
@@ -26,53 +25,45 @@ const MyComponent = () => {
   //a state hook to hold the total number of pages
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  //Set the search citizenId
-    const [searchCitizen, setSearchCitizen] = useState<string>('');
-
   //this determines size of page
   const limit = 20;
 
   useEffect(() => {
-    getTimeStamps(activePage, searchCitizen);
-  }, [activePage, searchCitizen]);
+    getTimeStamps(activePage);
+  }, [activePage]);
 
   //this function will get one page of timeStamps from the backend
-  const getTimeStamps = async (pageNumber: number ,citizen: string ) => {
-    try{
-    const response = await axios.get(`${Variables.API_URL}/timestamps/by-citizen/${citizen}?page=${pageNumber}&limit=${limit}`, {
+  const getTimeStamps = async (pageNumber: number) => {
+    console.log("calling");
+    const response = await axios.get(`${Variables.API_URL}/accident?page=${pageNumber}&limit=${limit}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
       },
-    })
-    console.log(response.data.timestamps);
-    setTimeStamps(response.data.timestamps);
+    }).catch(error => {
+      //Cookies.remove('token');
+      //window.location.href = '/';
+    });
+    console.log(response.data.accidents);
+    setTimeStamps(response.data.accidents);
     setTotalPages(response.data.totalPages);
-    }catch(error){
-        return;
-    }
-
     
-    
-   
     
     
   };
 
   //this function will handle search for a specific citizen
   const handleSearch = async (citizen: string) => {
-    getTimeStamps(activePage, citizen);
-    setSearchCitizen(citizen);
   }
 
   const handleNextPage = () => {
   
-    getTimeStamps(activePage + 1, searchCitizen);
+    getTimeStamps(activePage + 1);
     setActivePage(activePage + 1);
 
   };
   const handlePrevPage = () => {
     
-    getTimeStamps(activePage - 1, searchCitizen);
+    getTimeStamps(activePage - 1);
     setActivePage(activePage - 1);
   }
 
@@ -84,47 +75,33 @@ const MyComponent = () => {
       <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
         <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}></div>
          <div style={{position: 'absolute' , top: '25px', left: '10px'}}>
-         <input
-                type="text"
-                placeholder="Search by ID"
-                value={searchCitizen}
-                onChange={(e) => setSearchCitizen(e.target.value)}
-                onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                    handleSearch(searchCitizen);
-                    }
-                }}
-                />
+          {/*<input type="text" placeholder="Search by ID" value={searchTerm} style={{ }} onChange={handleSearch} />*/}
           </div>
 
           <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
             <h1 style={{color: 'white', fontSize: '50px' }}>Night assist</h1>
+           
           </div>
 
           <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                  window.location.href = '/citizenSearch';
+                }}>Citizen</button>
 
 
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-                  window.location.href = '/accidentPage';
-                  }}>Accidents</button>
-
-
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
                   window.location.href = '/adminPage';
-                  }}>Admin</button>
+                }}>Admin</button>
 
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-                  window.location.href = '/showData';
-                  }}>Data</button>
+                    <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                      window.location.href = '/showData';
+                      }}>data</button>
 
                 <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
                   Cookies.remove('token');
                   window.location.href = '/';
                 }}>Log out</button>
-
-                
             </div>
-        
           
 
        </div>
@@ -142,18 +119,21 @@ const MyComponent = () => {
       >
         {/* Render list items */}
         {timeStamps.map((item, index) => {
-          const startTime = new Date(item.startTime);
-          const endTime = new Date(item.endTime);
-          const duration = Math.abs(endTime.getTime() - startTime.getTime());
+           const alarmTime = new Date(item.alarmTime);
 
           return (
             <div key={index}>
               <div>
-                {" Start : "}{startTime.toUTCString()}
+                {" Citizen : "} {item.citizen}
               </div>
               <div>
-                {" Duration : "}{duration}ms
-              </div>
+                {"Time : "} {alarmTime.toUTCString()}
+                </div>
+                <div>
+                    {"position : "} {item.positionId}
+                </div>
+
+             
               <div>
                 {"ID : "}{item._id}
               </div>
@@ -185,5 +165,3 @@ const MyComponent = () => {
 </div>
 )};
 export default MyComponent;
-  
-

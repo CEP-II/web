@@ -161,7 +161,7 @@ interface Values {
     //this is the login form
     <div className={styles.login_box}>
       <div className="d-flex justify-content-center align-items-start">
-        <Image src={mypic} alt="" width="800" height="250" />
+        <Image src={mypic} alt="" width="400" height="400" />
       </div>
       
       <Formik
