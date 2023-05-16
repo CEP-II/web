@@ -265,6 +265,11 @@ export default function AdminForm()
           
 
                   <div style={{position: 'absolute', top: '15px', right: '10px', padding: '10px'}}>
+
+                  <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                  window.location.href = '/citizenSearch';
+                }}>Citizen</button>
+
                       <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px', width: '100px'}} onClick={() => {
                       window.location.href = '/showData';
                       }}>data</button>
