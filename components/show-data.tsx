@@ -17,7 +17,7 @@ interface timeStamp
   deviceId: string;
 }
 
-const MyComponent = () => {
+const MyComponent = () => {3
   //a state hook to hold timeStamps
   const [timeStamps, setTimeStamps] = useState([]);
   //a state hook to hold the current page number
@@ -80,6 +80,11 @@ const MyComponent = () => {
           </div>
 
           <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                  window.location.href = '/citizenSearch';
+                }}>Citizen</button>
+
+
                 <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
                   window.location.href = '/adminPage';
                 }}>Admin</button>

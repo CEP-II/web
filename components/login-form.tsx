@@ -103,6 +103,7 @@ interface Values {
           //saves the token in a cookie and sets the expiration date to 10 minutes
           Cookies.set('token', response.data.token, { expires: 1/24 });
           Cookies.set('citizenId', response.data.id, { expires: 1/24 });
+          console.log(Cookies.get('token'));
           
 
 

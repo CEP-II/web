@@ -312,38 +312,42 @@ export default function AdminForm()
                           maxWidth: '95%',
                         }}
                       >
-                        {/* Render list items */}
-                        <ul style={{ listStyleType: 'none', padding: '0' }}>
-                          {currentItems.map((item, index) => (
-                              <li key={index}>
-                              <div>
-                                  {"Name : "} {item.name}
-                              </div>
-                                <div>
-                                  {"Email : "} {item.email}
-                                </div>
-                                <div>
-                                  {"Phone Number : "} {item.phone}
-                                </div>
-                                <div>
-                                  {"Birth Date : "} {item.birthdate}
-                                </div>
-                                <div>
-                                  {"Addres : "} {item.address.city} {" "} {item.address.street} {" "} {item.address.postal}
-                                </div>
-                                <div>
-                                  {"Device ID : "} {item.deviceId}
-                                </div>
-                                <div>
-                                  {"Citizen : "} {item._id}
-                                </div>
-                                <div>
-                                  {"_____________________________________________"}
-                                </div>
+                        {currentItems.map((item, index) => {
+                          const birthDate = new Date(item.birthdate);
+                          return (
+                            <div
 
-                            </li>
-                          ))}
-                        </ul>
+                              key={index}
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: '20px',
+                                background: '#fff',
+                                borderRadius: '10px',
+                                boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+                              }}
+                            >
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.citizen}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.name}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.email}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.phone}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{birthDate.toISOString}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.city}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.street}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.postal}</p>
+                              <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.deviceId}</p>
+                              
+
+                            </div>)
+
+                        }
+                        
+                        )}
+                        
+                       
+                        
                       </div>
       
         
