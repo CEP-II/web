@@ -180,7 +180,7 @@ export default function AdminForm()
 
           const [data, setData] = useState([]);
           const [activePage, setActivePage] = useState(1);
-          const [itemsPerPage] = useState(4);
+          const [itemsPerPage] = useState(6);
           const [searchTerm, setSearchTerm] = useState('');
           const [formikProps, setFormikProps] = useState(null);
 
@@ -414,15 +414,15 @@ export default function AdminForm()
                                     }}
                                     onClick={() => handleItemClick(item, formikProps )}
                                   >
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.citizen}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.name}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.email}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.phone}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{birthDate.toUTCString()}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.city} {item.address.postal}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.street}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item.deviceId}</p>
-                                    <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1E88E4'}}>{item._id}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.citizen}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.name}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.email}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.phone}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{birthDate.toUTCString()}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.city} {item.address.postal}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>{item.address.street}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>device: {item.deviceId}</p>
+                                    <p style={{fontSize: '15px', fontWeight: 'bold', color: '#1E88E4'}}>id: {item._id}</p>
 
                                     
 
