@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import withAuth from '../HOC'; // import the HOC
-import ShowData from 'components/citizen-form';
+import MyComponent from 'components/citizen-form';
 
 const Dashboard: NextPage = () => {
   return (
@@ -12,7 +12,7 @@ const Dashboard: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="vh-100 d-flex justify-content-center align-items-center">
-        <ShowData />
+        <MyComponent />
       </main>
     </div>
   );

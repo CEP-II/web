@@ -39,7 +39,8 @@ interface Values {
         //if the login is successful we get a token
         .then(response => {       
           //saves the token in a cookie and sets the expiration date to 10 minutes
-          Cookies.set('token', response.data.token, { expires: 1/24/6 });
+          Cookies.set('token', response.data.token, { expires: 1/24 });
+          
 
           console.log(Cookies.get('token'));
 
@@ -101,7 +102,9 @@ interface Values {
         .then(response => {       
           //saves the token in a cookie and sets the expiration date to 10 minutes
           Cookies.set('token', response.data.token, { expires: 1/24 });
-          console.log(response.data);
+          Cookies.set('citizenId', response.data.id, { expires: 1/24 });
+          
+
 
          
 
@@ -112,7 +115,7 @@ interface Values {
             
             setLoginSuccess(true);
             //redirect to the showData page
-            window.location.href = '/citizenPage';
+           window.location.href = '/citizenPage';
             
           } 
           else {

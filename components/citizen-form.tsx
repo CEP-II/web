@@ -1,72 +1,122 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Variables } from '../data/globalVariable';
 import Pagination from 'react-js-pagination';
 
-interface timeStamp
-{
-    _id: string;
-    startTime: string;
-    duration: string;
-    endTime: string;
-    citizen: string;
-    deviceId: string;
-}
 
-const PaginatedList = () => {
+
+const MyComponent = () => {
+
+    const [data, setData] = useState([]);
     const [activePage, setActivePage] = useState(1);
     const [itemsPerPage] = useState(20);
     const [searchTerm, setSearchTerm] = useState('');
-    const [currentPageData, setCurrentPageData] = useState<timeStamp[]>([]);
-  
+
+
     useEffect(() => {
-      fetchData(activePage);
-    }, [activePage]);
-  
-    const fetchData = async (page: number) => {
-      const response = await axios.get(`${Variables.API_URL}/timestamps?page=${page}&limit=20`, {
+      fetchData();
+    }, []);
+
+    const fetchData = async () => {
+      
+
+      const response = await axios.get(Variables.API_URL + '/timestamps',{
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
-        },
-      }).catch(error => {
+        }
+      }).catch((error) => {
+        /*if there is an error go to the login page*/ 
         Cookies.remove('token');
-        window.location.href = '/';
+        window.location.href = '/';  
       });
-  
-      const newData = response.data.timestamps;
-      setCurrentPageData(newData);
+
+
+
+      console.log(response.data.citizens);
+
+      setData(response.data.citizens);
+      
     };
-  
-    const handlePageChange = (pageNumber: number) => {
-      if (pageNumber !== activePage) {
-        setActivePage(pageNumber);
-      }
+
+    const handlePageChange = (pageNumber:any) => {
+      setActivePage(pageNumber);
     };
-  
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleSearch = (event:any) => {
       setSearchTerm(event.target.value);
-      setActivePage(1);
+      setActivePage(1); // reset active page when search term changes
     };
-  
-    const filteredData = currentPageData.filter(item => item.citizen.includes(searchTerm));
-  
+
+
+    const indexOfLastItem = activePage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    let currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
     return (
-      <div>
-        {/* Rest of the code */}
-        <Pagination
-          activePage={activePage}
-          itemsCountPerPage={itemsPerPage}
-          totalItemsCount={-1} // Set to a large negative value to disable pagination count
-          pageRangeDisplayed={5}
-          onChange={handlePageChange}
-          itemClass="page-item"
-          linkClass="page-link"
-        />
-        {/* Rest of the code */}
-      </div>
+        <div>
+            
+
+        <div style={{position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '100%'}}>
+        {/* Render list items */}
+        <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+          gap: '0px',
+          margin: '10px auto',
+          maxWidth: '95%',
+        }}
+      >
+        {/* Render list items */}
+        {data.map((item, index) => {
+          const startTime = new Date(item.startTime);
+          const endTime = new Date(item.endTime);
+          const duration = Math.abs(endTime.getTime() - startTime.getTime());
+
+          return (
+            <div key={index}>
+              <div>
+                {" Citizen : "} {item.citizen}
+              </div>
+              <div>
+                {" Start : "}{startTime.toISOString()}
+              </div>
+              <div>
+                {" Duration : "}{duration}ms
+              </div>
+              <div>
+                {"ID : "}{item._id}
+              </div>
+              <div>
+                {" DeviceID : "} {item.deviceId}
+              </div>
+              <div>
+                {"___________________________________"}
+              </div>
+            </div>
+          );
+        })}
+        </div>
+
+
+
+
+                    <div style={{position: 'absolute', bottom: '-50px', left: '50%', transform: 'translateX(-50%)'}}>
+                      {/* Render pagination component */}
+                              <Pagination
+                                activePage={activePage}
+                                itemsCountPerPage={itemsPerPage}
+                                totalItemsCount={data.length}
+                                pageRangeDisplayed={5}
+                                onChange={handlePageChange}
+                                itemClass="page-item"
+                                linkClass="page-link"
+                              />
+                      </div>
+
+        </div>
+        </div>
     );
-  };
-  
-  export default PaginatedList;
-  
+};
+export default MyComponent;
