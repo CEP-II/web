@@ -46,8 +46,8 @@ const MyComponent = () => {3
         Authorization: `Bearer ${Cookies.get('token')}`,
       },
     }).catch(error => {
-      //Cookies.remove('token');
-      //window.location.href = '/';
+      Cookies.remove('token');
+      window.location.href = '/';
     });
     console.log(response.data.accidents);
     setTimeStamps(response.data.accidents);
