@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import AdminForm from 'components/admin-form';
+import AdminForm from 'components/citizen-form';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import styles from '/components/stdColors.module.css'
 

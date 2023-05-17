@@ -34,6 +34,7 @@ const MyComponent = () => {
       });
       setTimeStamps(response.data.timestamps);
       setTotalPages(response.data.totalPages);
+      console.log(response.data);
      
 
     } catch (error) {
@@ -139,7 +140,7 @@ const MyComponent = () => {
               >
                 <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
                 <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
-                <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
+                <p style={{ fontSize: '14px', margin: '0px' }}>Position: {item.positionId}</p>
                 <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
                 <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
                 <p style={{ fontSize: '14px', margin: '0px' }}>ID: {item._id}</p>

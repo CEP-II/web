@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Night assiss data</title>
+        <title>Night assist log in</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         body {
           background-color: #E1ECFD;
           margin: 0;
-          overflow: hidden;
+         
         }
       `}</style>
       <main>

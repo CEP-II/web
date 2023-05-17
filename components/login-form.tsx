@@ -51,7 +51,7 @@ interface Values {
             
             setLoginSuccess(true);
             //redirect to the showData page
-            window.location.href = '/showData';
+            window.location.href = '/timestamps';
             
           } 
           else {
@@ -195,23 +195,23 @@ interface Values {
   </button>
 
   <div style={{ display: 'flex', alignItems: 'center' }}>
-    <Field name="isAdmin">
-      {({ field: { value }, form: { setFieldValue } }) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Switch
-            style={{ marginTop: '10px' }}
-            checked={value}
-            onChange={(value) => {
-              setFieldValue('isAdmin', value);
-              setFieldValue('username', value ? 'admin' : '');
-            }}
-            className={styles.color_button}
-          />
-          <label style={{ marginTop: '8px', marginLeft: '5px' }} htmlFor="isAdmin">Admin</label>
-        </div>
-      )}
-    </Field>
-  </div>
+  <Field name="isAdmin">
+    {({ field: { value }, form: { setFieldValue } }) => (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Switch
+          
+          style={{ marginTop: '10px' }}
+          checked={value}
+          onChange={(value) => {
+            setFieldValue('isAdmin', value);
+            setFieldValue('username', value ? 'admin' : '');
+          }}
+        />
+        <label style={{ marginTop: '8px', marginLeft: '5px' }} htmlFor="isAdmin">Admin</label>
+      </div>
+    )}
+  </Field>
+</div>
 </div>
 
    

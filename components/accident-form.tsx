@@ -3,7 +3,7 @@ import { use, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Variables } from '../data/globalVariable';
 import Pagination from 'react-js-pagination';
-import { get } from 'http';
+import styles from '../components/stdColors.module.css'
 
 
 interface timeStamp
@@ -88,41 +88,42 @@ const resetItemClicked = () => {
 
   return (
     <div>
-      <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
-        <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}></div>
-         <div style={{position: 'absolute' , top: '25px', left: '10px'}}>
-          {/*<input type="text" placeholder="Search by ID" value={searchTerm} style={{ }} onChange={handleSearch} />*/}
-          </div>
+     <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: '12%' }}>
+         <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
+          <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
+    
 
-          <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
-            <h1 style={{color: 'white', fontSize: '50px' }}>Night assist</h1>
-           
-          </div>
+         
 
           <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
-                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-                  window.location.href = '/citizenSearch';
-                }}>Citizen</button>
 
 
-                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-                  window.location.href = '/adminPage';
-                }}>Admin</button>
+                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                  window.location.href = '/accidentPage';
+                  }}>Accidents</button>
 
-                    <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-                      window.location.href = '/showData';
-                      }}>data</button>
 
-                <button type="button" className="btn btn-primary" style={{ fontSize: '14px', padding: '5px 10px' }} onClick={() => {
+                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
+                  window.location.href = '/citizen';
+                  }}>Citizen</button>
+
+                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
+                  window.location.href = '/timestamps';
+                  }}>Timestaps</button>
+
+                <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px' }}  onClick={() => {
                   Cookies.remove('token');
                   window.location.href = '/';
                 }}>Log out</button>
+
+                
             </div>
+        
           
 
        </div>
 
-       <div style={{position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', width: '100%'}}>
+       <div style={{position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: '100%'}}>
         {/* Render list items */}
         <div
         style={{
@@ -157,7 +158,7 @@ const resetItemClicked = () => {
             >
               <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
               <p style={{ fontSize: '14px', margin: '0px' }}>Time of Accidents: {alarmTime.toLocaleString()}</p>
-              <p style={{ fontSize: '14px', margin: '0px' }}>Possition: {item.positionId.toLocaleString()}</p>
+              <p style={{ fontSize: '14px', margin: '0px' }}>Position: {item.positionId.toLocaleString()}</p>
               <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
               
             </div>

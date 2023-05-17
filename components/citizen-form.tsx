@@ -1,228 +1,498 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import axios from "axios";
+import { Formik, Form, Field, FormikHelpers, FormikProps } from "formik";
+import { Variables } from "../data/globalVariable";
 import Cookies from 'js-cookie';
-import { Variables } from '../data/globalVariable';
-import Pagination from 'react-js-pagination';
+import '../components/admin-form.module.css'
+import { useState, useEffect } from "react";
+import Pagination from "react-js-pagination";
+import styles from '/components/stdColors.module.css'
 
-interface timeStamp {
-  _id: string;
-  startTime: string;
-  endTime: string;
-  citizen: string;
-  deviceId: string;
+
+
+
+//
+
+
+interface Values {
+    password: string;
+    passwordRepeat : string;
+    phoneNumber : string;
+    email : string;
+    name : string;
+    postal : string;
+    street : string;
+    city : string;
+    birthDate : string;
+    deviceId : string;
+   
 }
 
-const MyComponent = () => {
-
-  //timestamp
 
 
-  const [timeStamps, setTimeStamps] = useState<timeStamp[]>([]);
-  const [activePage, setActivePage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
-  const [selectedItem, setSelectedItem] = useState<timeStamp | null>(null);
-  const limit = 20;
+export default function AdminForm() 
+{
+    //this function will create a new user in the database
+    const [passwordMatch, setPasswordMatch] = useState(true);
 
-  useEffect(() => {
-    getTimeStamps(activePage);
-  }, [activePage]);
+    const createUser = (values: Values) => 
+        {
+           
+                const address = {
+                    postal : values.postal,
+                    street : values.street,
+                    city : values.city,
+                }
+                const birthDate = new Date(values.birthDate); // Convert birthdate string to Date object
+                //converts the date from string to Date format
+                const date = Date.now();    
+                
+                //send the post request to the backend to create a new user in the database
+                //send the token in the header to make sure the user is logged in
+                axios.post(Variables.API_URL + '/citizen/signup', {
+                    //token is saved in the cookie and send in the header
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    },
+                    //send the values from the form to the backend
+                    password: values.password,
+                    phone : values.phoneNumber,
+                    email : values.email,
+                    name : values.name,
+                    address : address,
+                    birthdate : date,
+                    deviceId : values.deviceId,
+                })
+                //if the user is created successfully we get a message
+                .then(response => {fetchData(),console.log("eroor comes in response") , console.log(response.data.message), fetchData()})
+                .catch(error => {
+           
+                });
+            
+        }
+        const resetForm = (formikProps: any) => {
+            formikProps.resetForm();
+            //reset index selected
+            setSelectedItemIndex(null);
+            setSelectedItem(null);
+        };
 
-  const getTimeStamps = async (pageNumber: number) => {
-    try {
-      const response = await axios.get(`${Variables.API_URL}/timestamps/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('token')}`,
-        },
-      });
-      setTimeStamps(response.data.timestamps);
-      setTotalPages(response.data.totalPages);
-     
-
-    } catch (error) {
-   
-      
-    }
-  };
-
-  const handleItemClick = (index: number, values: timeStamp) => {
-    setSelectedItemIndex(index);
-    setSelectedItem(values);
-  };
-
-  const resetItemClicked = () => {
-    setSelectedItemIndex(null);
-    setSelectedItem(null);
-  };
-
-  //accidents
-  const [accidents, setAccidents] = useState([]);
- 
-
-
-  useEffect(() => {
-    getAccidents();
-  }, []);
-
-  const getAccidents = async () => {
-    console.log(Cookies.get('citizenId'));
-    try {
-      const response = await axios.get(`${Variables.API_URL}/accident/by-citizen/${Cookies.get('citizenId')}`, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('token')}`,
-        },
-      });
-      
-      setAccidents(response.data.accidents);
+        const validate = (values: Values) => {
+            const errors: Partial<Values> = {};
+            var noError = true;
     
-      console.log(response.data.accidents);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+            if (!values.name) {
+              errors.name = "Name is required";
+              noError = false;
+            }
+            if (!values.email) {
+              errors.email = "Email is required";
+              noError = false;
+            }
+            if(!values.birthDate) {
+                errors.birthDate = "Birthdate is required";
+                noError = false;
+            }
+            if (!values.phoneNumber) {
+              errors.phoneNumber = "Phone number is required";
+                noError = false;
+            } else if (!/^[0-9]{8}$/i.test(values.phoneNumber)) {
+              errors.phoneNumber = "Invalid phone number";
+                noError = false;
+            }
+          
+            if (!values.password) {
+              errors.password = "Password is required";
+                noError = false;
+            }
+          
+            if (values.password !== values.passwordRepeat) {
+              errors.passwordRepeat = "Passwords do not match";
+                noError = false;
+            }
+            if (!values.city || !values.street || !values.postal) {
+                errors.city = "Address is required";
+                noError = false;
+            }
+            if(!values.deviceId) {
+
+                errors.deviceId = "Device ID is required";
+                noError = false;
+            }
+            console.log("no error:" + noError)
+
+            if(noError) {
+                console.log("no error");
+                setPasswordMatch(true);
+            } 
+            else if(!noError) {
+                console.log("there is an error");
+                setPasswordMatch(false);
+                return errors;
+            }
+          };
+
+
+          const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+            console.log(values);
+            var errors = validate(values);
+            if (passwordMatch) {
+              createUser(values);
+            }
+            else if(passwordMatch === false)
+            {
+            setSubmitting(false);
+            //show the errors in a pop up window
+            console.log("passwordMath:" + passwordMatch);
+            alert(JSON.stringify(errors, null, 2));
+            }
+          };
+
+          const deleteUser = (id: string) => {
+            axios.delete(Variables.API_URL + '/citizen/' + id, {
+              headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`,
+              }
+            }).then(response => {
+              console.log(response.data.message);
+              fetchData();
+            }).catch(error => {
+             
+            });
+          };
+
+         
+            
+
+
+          const updateUser = (values: any) => {
+
+
+            const updateUserData = [
+              {propName: "name", value: values.name},
+              {propName: "email", value: values.email},
+              {propName: "phone", value: values.phoneNumber},
+              
+              {propName: "birthdate", value: values.birthDate},
+              {propName: "deviceId", value: values.deviceId},
+
+              //addres is an object
+              {propName: "address", value: {
+                postal : values.postal,
+                street : values.street,
+                city : values.city,
+              }},
+
+              //password update only if a new password is entered
+              //if the password is not entered, the password will not be updated
+              ...(values.password !== "" ? [{ propName: "password", value: values.password }] : [])
+              
 
 
 
 
+            ]
 
- 
+            axios.patch(Variables.API_URL + '/citizen/'+ values.id, updateUserData, {
+              headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`,
+              },
+           
+             
+            
+            }).then(response => {
+              console.log(response.data.message);
+              fetchData();
+            }
+            ).catch(error => {
+              console.log(error);
+            });
+
+          };
 
 
-  return (
+          function getBrowserResolutionWidth() {
+            if (typeof window !== 'undefined') {
+              return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            }
+            return null;
+          }
+
+          var browserWidth = getBrowserResolutionWidth();
+
+          var limit = 16
+
+          const setLimit = () => {
+            if(browserWidth < 1100) {
+              limit = 4;}
+           
+            else if(browserWidth < 1350) {
+              limit = 6;
+            }
+            else if(browserWidth < 1600) {
+              limit = 9;
+            }
+
+          }
+          setLimit(); 
+
+            console.log("limit:" + limit + "browserWidth:" + browserWidth);
+
+          const [data, setData] = useState([]);
+          const [activePage, setActivePage] = useState(1);
+          const [itemsPerPage] = useState(limit);
+          const [searchTerm, setSearchTerm] = useState('');
+          const [formikProps, setFormikProps] = useState(null);
+          const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
+          const [selectedItem, setSelectedItem] = useState<any | null>(null);
+
+
+          useEffect(() => {
+            fetchData();
+          }, []);
+
+          const fetchData = async () => {
+            
+
+            const response = await axios.get(Variables.API_URL + '/citizen',{
+              headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`,
+              }
+            }).catch((error) => {
+              /*if there is an error go to the login page*/ 
+              Cookies.remove('token');
+              window.location.href = '/';  
+            });
+
+
+
+            console.log(response.data.citizens);
+
+            setData(response.data.citizens);
+            
+          };
+
+          const handlePageChange = (pageNumber:any) => {
+            setActivePage(pageNumber);
+          };
+
+          const handleSearch = (event:any) => {
+            setSearchTerm(event.target.value);
+            setActivePage(1); // reset active page when search term changes
+          };
+
+
+          const indexOfLastItem = activePage * itemsPerPage;
+          const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+          let currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+          if (searchTerm) {
+            // filter currentItems array by search term
+            currentItems = currentItems.filter(item => item.citizen.toString().includes(searchTerm));
+          }
+          const handleItemClick = (index:number ,item:any, values : FormikHelpers<Values> ) => {
+            //fill in the form with the data of the user that is clicked
+            console.log(item);
+            values.setFieldValue('name', item.name);
+            values.setFieldValue('email', item.email);
+            values.setFieldValue('phoneNumber', item.phone);
+            values.setFieldValue('birthDate', item.birthdate);
+            values.setFieldValue('deviceId', item.deviceId);
+            values.setFieldValue('city', item.address.city);
+            values.setFieldValue('street', item.address.street);
+            values.setFieldValue('postal', item.address.postal);
+            values.setFieldValue('password', "");
+            values.setFieldValue('passwordRepeat', "");
+            values.setFieldValue('id', item._id);
+            
+            setSelectedItemIndex(index);
+            setSelectedItem(values);
+          };
+            
+        
+
+            
+
+        
+         
+
+          
+    return (
     <div>
-      <div  style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '12%',  background: '#1E88E4'}}>
-        <h1 style={{textAlign: 'center', color: 'white', fontWeight: 'bold'}}>Night Assist</h1>
-        <h3 style={{textAlign: 'center', color: 'white', fontSize:'100%'}}>Your Guide through the night</h3>
-      
 
-      {/* button to log out */}
-      <button className="btn btn-primary" style={{position: 'absolute', top: '30%', right: '3%', height: '40%'}} onClick={() => {
-        Cookies.remove('token');
-        Cookies.remove('citizenId');
-        window.location.href = '/';
-      }}>Log out</button>
-      </div>
+    <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: '12%' }}>
+            <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
+              <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
+              <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
 
-     
-  
-          <div style={{ position: 'absolute', top: '14%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
-            {/* Render list items */}
-            <h1 style={{textAlign: 'center', color: 'black', fontWeight: 'bold'}}>Your Timestamps</h1>
-            <div
-              style={{
+
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                      window.location.href = '/accidentPage';
+                      }}>Accidents</button>
+
+
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
+                      window.location.href = '/citizen';
+                      }}>Citizen</button>
+
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
+                      window.location.href = '/timestamps';
+                      }}>Timestaps</button>
+
+                    <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px' }}  onClick={() => {
+                      Cookies.remove('token');
+                      window.location.href = '/';
+                    }}>Log out</button>
+                </div>
+          </div>
+
+          <div className="mb-2" style={{position:'absolute', top:'12%' , left: '0%', width: '100%', height: '92%'}}>
+                      
+            
+                      <Formik
+                          initialValues={{
+                              password: "",
+                              passwordRepeat: "",
+                              phoneNumber: "",
+                              email: "",
+                              name: "",
+                              city: "",
+                              street: "",
+                              postal: "",
+                              birthDate: "",
+                              deviceId: "",
+                              id: ""
+                          }}
+                          onSubmit={onSubmit}
+                      >
+                      {(formikProps) => (
+                      <Form>
+
+                      <div style={{position: 'absolute', top: '0%' , left: '0%', background: '#73a6ff', height: '100%', width: '15%'}}>
+                              
+
+                              <div className="mb-2" style={{padding: '2%' ,marginTop: '4%'}}>
+                                  <Field className="form-control" id="name" name="name" placeholder="Name" style={{fontSize:'1vw'}} />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="password" name="password" placeholder="Password" type="password" style={{fontSize:'1vw'}} />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat Password" type="password" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="email" name="email" placeholder="Email" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" style={{fontSize:'1vw'}} />
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  {/* Birthdate input */}
+                                  <Field className="form-control" id="birthDate" name="birthDate" type="date" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="city" name="city" placeholder="City" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="street" name="street" placeholder="Street" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="postal" name="postal" placeholder="Postal" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="deviceId" name="deviceId" placeholder="Device ID" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div className="mb-2" style={{padding: '2%'}}>
+                                  <Field className="form-control" id="id" name="id" placeholder="ID" style={{fontSize:'1vw'}}/>
+                              </div>
+
+                              <div>
+                                  <button type="submit" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5% 10%', marginRight: '5%', width: '40%' , marginLeft: '5%'}}  >Create User</button>
+                                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5% 10%', width: '40%' }} onClick={() => resetForm(formikProps)}>Clear Fields</button>
+                              </div>
+                              <div>
+                                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5% 10%', width: '40%', marginRight: '5%', marginLeft: '5%' , marginTop: '5%'}} onClick={() => {deleteUser(formikProps.values.id); resetForm(formikProps);}}>Delete User</button>
+                                  <button type="button"  className="btn btn-primary" style={{ fontSize: '1vw', padding: '5% 10%', width: '40%', marginTop: '5%'}} onClick={() => {updateUser(formikProps.values); resetForm(formikProps);}}>Update User</button>
+                              </div>
+                      </div>
+                        
+
+            {/* Data objects */}
+            <div style={{ position: 'absolute', top: '0%', left: '15%', height: '85%', width: '85%' }}>
+              <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                 gap: '10px',
                 margin: '10px auto',
                 maxWidth: '95%',
-              }}
-            >
-              {/* Render list items */}
-              {timeStamps.map((item, index) => {
-                const startTime = new Date(item.startTime);
-                const endTime = new Date(item.endTime);
-                const duration = Math.abs(endTime.getTime() - startTime.getTime());
-      
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      padding: '2%',
-                      borderRadius: '10px',
-                      boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-                      cursor: 'pointer',
-                      background: selectedItemIndex === index ? '#dae1e3' : '#fff',
-                    }}
-                    onClick={() => {
-                      handleItemClick(index, item);
-                    }}
-                  >
-                
-                    <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
-                    <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
-                    <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
-                    <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
-                    <p style={{ fontSize: '14px', margin: '0px' }}>ID: {item._id}</p>
-                  </div>
-                );
+              }}>
+                {currentItems.map((item, index) => {
+                  const birthDate = new Date(item.birthdate);
+
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '2%',
+                        borderRadius: '10px',
+                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+                        cursor: 'pointer',
+                        background: selectedItemIndex === index ? '#dae1e3' : '#fff',
+                        width: '95%',
+                        maxWidth: '500px',
+                        minWidth: 'fit-content', // Set the minWidth property to fit the content width
+                        margin: '1%',
+                      }}
+                      onClick={() => { handleItemClick(index, item, formikProps), console.log("Selected" + selectedItem + "" + index) }}
+                    >
+                      {/* Render item details */}
+                      <div className="item-container">
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold' , margin: '0.5rem 0'}}>Name: {item.name}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold' , margin: '0.5rem 0'}}>Email: {item.email}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Phone Number: {item.phoneNumber}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Birthdate: {birthDate.toLocaleDateString()}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>City: {item.address.city}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0'}}>Street: {item.address.street}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Postal: {item.address.postal}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Device ID: {item.deviceId}</p>
+                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>ID: {item.id}</p>
+                        
+                      </div>
+                    </div>
+                  );
                 })}
-                
-              
+              </div>
+              {/* Pagination component */}
+              <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                <Pagination
+                  activePage={activePage}
+                  itemsCountPerPage={itemsPerPage}
+                  totalItemsCount={data.length}
+                  pageRangeDisplayed={5}
+                  onChange={handlePageChange}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
             </div>
-      
-      
-            {/* Pagination */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-              <Pagination
-                activePage={activePage}
-                itemsCountPerPage={limit}
-                totalItemsCount={totalPages * limit}
-                pageRangeDisplayed={10}
-                onChange={(pageNumber) => {setActivePage(pageNumber), resetItemClicked()}}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
-            </div>
-          </div>
-
-
-          <div style={{ position: 'absolute', top: '105%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
-            {/* Render list items */}
-            <h1 style={{textAlign: 'center', color: 'black', fontWeight: 'bold'}}>Your Accidents</h1>
-            {/* if no icidents write no icidents */}
-            {accidents.length === 0 && <h2 style={{textAlign: 'center', color: 'black'}}>No Accidents</h2>}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-                gap: '10px',
-                margin: '10px auto',
-                maxWidth: '95%',
-              }}
-            >
-              {/* Render list items */}
-              {accidents.map((item, index) => {
-           const alarmTime = new Date(item.alarmTime);
-
-          return (
-            <div key={index}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '2%',
-              
-              borderRadius: '10px',
-              boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-              cursor: 'pointer',
-              background: selectedItemIndex === index ? '#dae1e3' : '#fff',
-            
-            }}
-              onClick={() => {handleItemClick(index, item)}}
-            
-            >
-              <p style={{ fontSize: '14px', margin: '0px' }}>Time of Accidents: {alarmTime.toLocaleString()}</p>
-              <p style={{ fontSize: '14px', margin: '0px' }}>Possition: {item.positionId.toLocaleString()}</p>
-              <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>
-              
-            </div>
-          );
-        })}
-            </div>
-      
-      
-      
-          </div>
+          </Form>
+        )}
+      </Formik>
     </div>
-  );
-  
-  };
-export default MyComponent;
-  
-  
+  </div>
 
+  );
+}

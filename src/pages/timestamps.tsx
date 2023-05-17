@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import withAuth from '../HOC'; // import the HOC
-import MyComponent from 'components/citizen-search-form';
+import MyComponent from 'components/timestamps-form';
 
 const Dashboard: NextPage = () => {
   return (
@@ -11,6 +11,14 @@ const Dashboard: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <style jsx global>{`
+        body {
+          background-color: #E1ECFD;
+          margin: 0;
+          
+       
+        }
+      `}</style>
       <main className="vh-100 d-flex justify-content-center align-items-center">
         <MyComponent />
       </main>
