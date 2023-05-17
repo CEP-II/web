@@ -99,6 +99,8 @@ const MyComponent = () => {
       
     } catch (error) {
       console.log(error);
+    
+    
     }
 
 
@@ -125,7 +127,7 @@ const MyComponent = () => {
         <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}></div>
          <div style={{position: 'absolute' , top: '25px', left: '10px'}}>
             {/* drop down meny */}
-            <select value={selectedCitizen} className="btn btn--primary" onChange={handleCitizenChange}>
+            <select value={selectedCitizen} className="btn btn--primary" style={{background: '#0D6EFD', color: 'white', fontWeight: 'bold'}}onChange={handleCitizenChange}>
                 <option value="">Select Citizen</option>
                 {citizens.map((citizen, index) => (
                   <option key={index} value={citizen._id}>{citizen.name}</option>
@@ -134,7 +136,7 @@ const MyComponent = () => {
           </div>
 
           <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
-            <h1 style={{color: 'white', fontSize: '50px' }}>Night assist</h1>
+            <h1 style={{color: 'white', fontSize: '50px', fontWeight: 'bold' }}>Night assist</h1>
           </div>
 
           <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
@@ -210,9 +212,22 @@ const MyComponent = () => {
             );
           })}
         </div>
-      {/* buttons to go to next or prev page */}
+     
+      <div hidden={timeStamps.length === 0}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-           {/* Pagination */}
+        <div style={{ position: 'absolute', left: '2%' }}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ padding: '10%' }}
+              onClick={() => {
+                handleDelete();
+              }}
+              disabled={selectedItem === null}
+            >
+              Delete
+            </button>
+          </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <Pagination
             activePage={activePage}
@@ -223,7 +238,11 @@ const MyComponent = () => {
             itemClass="page-item"
             linkClass="page-link"
           />
-        </div></div>
+        </div>
+        </div>
+        </div>
+
+        
        
 
 
