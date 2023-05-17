@@ -251,6 +251,10 @@ const MyComponent = () => {
                   boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
                   cursor: 'pointer',
                   background: selectedItemIndex === index ? '#dae1e3' : '#fff',
+                  
+                  minWidth: 'fit-content', // Set the minWidth property to fit the content width
+                  
+
                 }}
                 onClick={() => {
                   handleItemClick(index, item);
