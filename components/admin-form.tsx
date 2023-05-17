@@ -6,6 +6,7 @@ import '../components/admin-form.module.css'
 import { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
 import styles from '/components/stdColors.module.css'
+import { get } from "http";
 
 
 
@@ -172,22 +173,28 @@ export default function AdminForm()
               {propName: "deviceId", value: values.deviceId},
 
               //addres is an object
-              {propName: "street", value: values.street},
-              {propName: "postal", value: values.postal},
-              {propName: "city", value: values.city},
+              {propName: "address", value: {
+                postal : values.postal,
+                street : values.street,
+                city : values.city,
+              }},
+
+              //password update only if a new password is entered
+              //if the password is not entered, the password will not be updated
+              ...(values.password !== "" ? [{ propName: "password", value: values.password }] : [])
+              
+
+
+
 
             ]
 
-           
-            console.log(Cookies.get('token'));
-            console.log(values.id);
-            console.log(updateUserData);
-            axios.patch(Variables.API_URL + '/citizen/'+ values.id, {
+            axios.patch(Variables.API_URL + '/citizen/'+ values.id, updateUserData, {
               headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
               },
            
-              updateUserData
+             
             
             }).then(response => {
               console.log(response.data.message);
@@ -196,17 +203,9 @@ export default function AdminForm()
             ).catch(error => {
               console.log(error);
             });
+
           };
 
-            
-
-          
-
-
-        
-
-            
-          
 
           function getBrowserResolutionWidth() {
             if (typeof window !== 'undefined') {
@@ -296,8 +295,8 @@ export default function AdminForm()
             values.setFieldValue('city', item.address.city);
             values.setFieldValue('street', item.address.street);
             values.setFieldValue('postal', item.address.postal);
-            values.setFieldValue('password', item.password);
-            values.setFieldValue('passwordRepeat', item.password);
+            values.setFieldValue('password', "");
+            values.setFieldValue('passwordRepeat', "");
             values.setFieldValue('id', item._id);
             
           };
