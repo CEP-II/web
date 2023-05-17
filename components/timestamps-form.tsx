@@ -224,52 +224,51 @@ const MyComponent = () => {
        <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>
         {/* Render list items */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-            gap: '10px',
-            margin: '10px auto',
-            maxWidth: '95%',
-          }}
-        >
-          {/* Render list items */}
-          {timeStamps.map((item, index) => {
-            const startTime = new Date(item.startTime);
-            const endTime = new Date(item.endTime);
-            const duration = Math.abs(endTime.getTime() - startTime.getTime());
-  
-            return (
-              <div
-                key={index}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '2%',
-                  borderRadius: '10px',
-                  boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-                  cursor: 'pointer',
-                  background: selectedItemIndex === index ? '#dae1e3' : '#fff',
-                  
-                  minWidth: 'fit-content', // Set the minWidth property to fit the content width
-                  
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+    gap: '2%',
+    margin: '1%',
+    maxWidth: '95%',
+    flexWrap: 'nowrap', // Prevent wrapping of items
+  }}
+>
+  {/* Render list items */}
+  {timeStamps.map((item, index) => {
+    const startTime = new Date(item.startTime);
+    const endTime = new Date(item.endTime);
+    const duration = Math.abs(endTime.getTime() - startTime.getTime());
 
-                }}
-                onClick={() => {
-                  handleItemClick(index, item);
-                }}
-              >
-                
-                <p style={{ fontSize: '1vw', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
-                <p style={{ fontSize: '1vw', margin: '0px' }}>Position: {item.positionId}</p>
-                <p style={{ fontSize: '1vw', margin: '0px' }}>Duration: {duration} ms</p>
-                <p style={{ fontSize: '1vw', margin: '0px' }}>Device ID: {item.deviceId}</p>
-                <p style={{ fontSize: '1vw', margin: '0px' }}>ID: {item._id}</p>
-              </div>
-            );
-          })}
-        </div>
+    return (
+      <div
+        key={index}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2%',
+          borderRadius: '10px',
+          boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+          cursor: 'pointer',
+          background: selectedItemIndex === index ? '#dae1e3' : '#fff',
+          width: '95%',
+          minWidth: 'fit-content', // Set the minWidth property to fit the content width
+        }}
+        onClick={() => {
+          handleItemClick(index, item);
+        }}
+      >
+        <p style={{ fontSize: '1vw', margin: '0px' ,whiteSpace: 'nowrap'}}>Start time: {startTime.toLocaleString()}</p>
+        <p style={{ fontSize: '1vw', margin: '0px',whiteSpace: 'nowrap' }}>Position: {item.positionId}</p>
+        <p style={{ fontSize: '1vw', margin: '0px',whiteSpace: 'nowrap' }}>Duration: {duration} ms</p>
+        <p style={{ fontSize: '1vw', margin: '0px',whiteSpace: 'nowrap' }}>Device ID: {item.deviceId}</p>
+        <p style={{ fontSize: '1vw', margin: '0px',whiteSpace: 'nowrap' }}>ID: {item._id}</p>
+      </div>
+    );
+  })}
+</div>
+
      
       <div hidden={timeStamps.length === 0}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -286,7 +285,7 @@ const MyComponent = () => {
               Delete
             </button>
           </div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4%' }}>
           <Pagination
             activePage={activePage}
             itemsCountPerPage={limit}
