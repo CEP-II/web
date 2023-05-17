@@ -270,8 +270,9 @@ const MyComponent = () => {
 </div>
 
      
-      <div hidden={timeStamps.length === 0}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+     
+     
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4%' }}>
         <div style={{ position: 'absolute', left: '2%' }}>
             <button
               type="button"
@@ -285,7 +286,6 @@ const MyComponent = () => {
               Delete
             </button>
           </div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4%' }}>
           <Pagination
             activePage={activePage}
             itemsCountPerPage={limit}
@@ -296,8 +296,8 @@ const MyComponent = () => {
             linkClass="page-link"
           />
         </div>
-        </div>
-        </div>
+   
+        
 
         
        
