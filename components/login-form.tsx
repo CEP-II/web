@@ -1,5 +1,5 @@
 import { Formik, Field, Form, FormikHelpers, FieldProps } from 'formik';
-import styles from './login-form.module.css'
+import styles from './stdColors.module.css'
 import Image from 'next/image'
 import axios from 'axios'
 import mypic from '../pictures/logo.png'
@@ -159,11 +159,13 @@ interface Values {
 
   return (
     //this is the login form
-    <div className={styles.login_box}>
-      <div className="d-flex justify-content-center align-items-start">
+    <div >
+      <div >
+        <div className="d-flex justify-content-center align-items-start" style={{padding: '5%'}}>
         <Image src={mypic} alt="" width="400" height="400" />
-      </div>
+        </div>
       
+      <div className="d-flex justify-content-center align-items-start" >
       <Formik
         initialValues={{
           username: '',
@@ -175,8 +177,8 @@ interface Values {
       >
         {({ isSubmitting }) => (
         <Form>
-        <div className="d-flex flex-column align-items-center">
-          <h1 className="display-6 mb-3">Login</h1>
+   
+        
       
           <div className="mb-2">
             <Field className="form-control" id="username" name="username" placeholder="email" aria-describedby="usernameHelp" style={{ width: '300px' }} />
@@ -186,24 +188,40 @@ interface Values {
             <Field className={`form-control ${loginSuccess ? '' : 'is-invalid'}`} id="password" name="password" placeholder="Password" type="password" style={{ width: '300px' }}/>
             {loginSuccess === false && <div className="invalid-feedback">Incorrect password or username</div>}
           </div>
-      
+
           <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-primary mr-3" style={{marginRight: '15px'}}disabled={isSubmitting}>
-              Login
-            </button>
-      
-            <label style={{marginTop: '8px', marginRight: '5px'}}  htmlFor="isAdmin">Admin</label>
-            <Field name="isAdmin" >
-              {({ field: { value }, form: { setFieldValue } }) => (
-                <Switch style={{marginTop: '10px'}} checked={value} onChange={(value) => {setFieldValue('isAdmin', value);setFieldValue('username', value ? 'admin' : '')}} />
-              )}
-            </Field>
-          </div>
+  <button type="submit" className={`btn btn-primary mr-3 ${styles.color_button}`} style={{ marginRight: '15px', height: '60%' }} disabled={isSubmitting}>
+    Login
+  </button>
+
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <Field name="isAdmin">
+      {({ field: { value }, form: { setFieldValue } }) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Switch
+            style={{ marginTop: '10px' }}
+            checked={value}
+            onChange={(value) => {
+              setFieldValue('isAdmin', value);
+              setFieldValue('username', value ? 'admin' : '');
+            }}
+            className={styles.color_button}
+          />
+          <label style={{ marginTop: '8px', marginLeft: '5px' }} htmlFor="isAdmin">Admin</label>
         </div>
+      )}
+    </Field>
+  </div>
+</div>
+
+   
+
       </Form>
       
         )}
       </Formik>
+      </div>
+    </div>
     </div>
   );
 };

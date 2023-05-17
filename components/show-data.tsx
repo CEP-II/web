@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Variables } from '../data/globalVariable';
 import Pagination from 'react-js-pagination';
+import styles from '../styles/ShowData.module.css';
 
 interface timeStamp {
   _id: string;
@@ -70,9 +71,7 @@ const MyComponent = () => {
     <div>
       <div className="mb-2" style={{position: 'absolute', top: '0px', left: '0px', width: '100%'}}>
         <div style={{width: '100%', height: '80px',  background: '#1E88E4'}}></div>
-         <div style={{position: 'absolute' , top: '25px', left: '10px'}}>
-          {/*<input type="text" placeholder="Search by ID" value={searchTerm} style={{ }} onChange={handleSearch} />*/}
-          </div>
+       
 
           <div style={{position: 'absolute', top: '10px' ,left: '50%', transform: 'translateX(-50%)'  }}>
             <h1 style={{color: 'white', fontSize: '300%', fontWeight: 'bold' }}>Night assist</h1>

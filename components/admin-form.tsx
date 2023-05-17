@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import '../components/admin-form.module.css'
 import { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-import { get } from "http";
+import styles from '/components/stdColors.module.css'
 
 
 
@@ -156,14 +156,49 @@ export default function AdminForm()
             });
           };
 
-          const updateUser = (values: any) => {
-            //first we delete the user
-            console.log("values.id:" + values.id);
- 
+         
+            
 
-           deleteUser(values.id);
-            //then we create a new user with the same id
-           createUser(values)
+
+          const updateUser = (values: any) => {
+
+
+            const updateUserData = [
+              {propName: "name", value: values.name},
+              {propName: "email", value: values.email},
+              {propName: "phone", value: values.phoneNumber},
+              
+              {propName: "birthdate", value: values.birthDate},
+              {propName: "deviceId", value: values.deviceId},
+
+              //addres is an object
+              {propName: "street", value: values.street},
+              {propName: "postal", value: values.postal},
+              {propName: "city", value: values.city},
+
+            ]
+
+           
+            console.log(Cookies.get('token'));
+            console.log(values.id);
+            console.log(updateUserData);
+            axios.patch(Variables.API_URL + '/citizen/'+ values.id, {
+              headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`,
+              },
+           
+              updateUserData
+            
+            }).then(response => {
+              console.log(response.data.message);
+              fetchData();
+            }
+            ).catch(error => {
+              console.log(error);
+            });
+          };
+
+            
 
           
 
@@ -171,7 +206,7 @@ export default function AdminForm()
         
 
             
-          }
+          
 
           function getBrowserResolutionWidth() {
             if (typeof window !== 'undefined') {
@@ -278,7 +313,7 @@ export default function AdminForm()
     return (
     <div>
 
-        <div  style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '8%',  background: '#1E88E4'}}>
+        <div  style={{position: 'absolute', top: '0%', left: '0%', width: '100%',height: '8%', background: "#0d57d8"}}>
                     
 
                     <div className="w-full h-full" style={{position: 'absolute' , top: '4%', left: '1%',}}>
