@@ -57,24 +57,25 @@ const MyComponent = () => {
 
   //accidents
   const [accidents, setAccidents] = useState([]);
-  const [activePageAccidents, setActivePageAccidents] = useState<number>(1);
-  const [totalPagesAccidents, setTotalPagesAccidents] = useState<number>(1);
+ 
+
 
   useEffect(() => {
-    getAccidents(activePageAccidents);
-  }, [activePageAccidents]);
+    getAccidents();
+  }, []);
 
-  const getAccidents = async (pageNumber: number) => {
+  const getAccidents = async () => {
     console.log(Cookies.get('citizenId'));
     try {
-      const response = await axios.get(`${Variables.API_URL}/accident/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
+      const response = await axios.get(`${Variables.API_URL}/accident/by-citizen/${Cookies.get('citizenId')}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         },
       });
       
       setAccidents(response.data.accidents);
-      setTotalPagesAccidents(response.data.totalPages);
+    
+      console.log(response.data.accidents);
     } catch (error) {
       console.log(error);
     }
@@ -215,18 +216,7 @@ const MyComponent = () => {
             </div>
       
       
-            {/* Pagination */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-              <Pagination
-                activePage={activePageAccidents}
-                itemsCountPerPage={limit}
-                totalItemsCount={totalPagesAccidents * limit}
-                pageRangeDisplayed={10}
-                onChange={(pageNumber) => {setActivePageAccidents(pageNumber), resetItemClicked()}}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
-            </div>
+      
           </div>
     </div>
   );
