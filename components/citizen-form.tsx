@@ -65,12 +65,14 @@ const MyComponent = () => {
   }, [activePageAccidents]);
 
   const getAccidents = async (pageNumber: number) => {
+    console.log(Cookies.get('citizenId'));
     try {
-      const response = await axios.get(`${Variables.API_URL}/accidents/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
+      const response = await axios.get(`${Variables.API_URL}/accident/by-citizen/${Cookies.get('citizenId')}?page=${pageNumber}&limit=${limit}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         },
       });
+      
       setAccidents(response.data.accidents);
       setTotalPagesAccidents(response.data.totalPages);
     } catch (error) {
@@ -104,6 +106,7 @@ const MyComponent = () => {
   
           <div style={{ position: 'absolute', top: '14%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
             {/* Render list items */}
+            <h1 style={{textAlign: 'center', color: 'black', fontWeight: 'bold'}}>Your Timestamps</h1>
             <div
               style={{
                 display: 'grid',
@@ -137,7 +140,7 @@ const MyComponent = () => {
                       handleItemClick(index, item);
                     }}
                   >
-                    <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+                
                     <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
                     <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
                     <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
@@ -145,7 +148,9 @@ const MyComponent = () => {
                     <p style={{ fontSize: '14px', margin: '0px' }}>ID: {item._id}</p>
                   </div>
                 );
-              })}
+                })}
+                
+              
             </div>
       
       
@@ -164,8 +169,11 @@ const MyComponent = () => {
           </div>
 
 
-          <div style={{ position: 'absolute', top: '90%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
+          <div style={{ position: 'absolute', top: '105%', left: '50%', transform: 'translateX(-50%)', width: '100%' , height: '90%'}}>
             {/* Render list items */}
+            <h1 style={{textAlign: 'center', color: 'black', fontWeight: 'bold'}}>Your Accidents</h1>
+            {/* if no icidents write no icidents */}
+            {accidents.length === 0 && <h2 style={{textAlign: 'center', color: 'black'}}>No Accidents</h2>}
             <div
               style={{
                 display: 'grid',
@@ -197,7 +205,6 @@ const MyComponent = () => {
               onClick={() => {handleItemClick(index, item)}}
             
             >
-              <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
               <p style={{ fontSize: '14px', margin: '0px' }}>Time of Accidents: {alarmTime.toLocaleString()}</p>
               <p style={{ fontSize: '14px', margin: '0px' }}>Possition: {item.positionId.toLocaleString()}</p>
               <p style={{ fontSize: '14px', margin: '0px' }}>Device ID: {item.deviceId}</p>

@@ -95,7 +95,7 @@ const MyComponent = () => {
         },
       });
       setCitizens(response.data.citizens);
-      console.log(response.data.citizens);
+      console.log("citizens" + response.data.citizens);
       
     } catch (error) {
       console.log(error);
@@ -202,7 +202,7 @@ const MyComponent = () => {
                   handleItemClick(index, item);
                 }}
               >
-                <p style={{ fontSize: '14px', margin: '0px' }}>Citizen: {item.citizen}</p>
+                
                 <p style={{ fontSize: '14px', margin: '0px' }}>Start time: {startTime.toLocaleString()}</p>
                 <p style={{ fontSize: '14px', margin: '0px' }}>End time: {endTime.toLocaleString()}</p>
                 <p style={{ fontSize: '14px', margin: '0px' }}>Duration: {duration} ms</p>
