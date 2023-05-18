@@ -219,27 +219,15 @@ export default function AdminForm()
 
           var browserWidth = getBrowserResolutionWidth();
 
-          var limit = 16
+          
 
-          const setLimit = () => {
-            if(browserWidth < 1100) {
-              limit = 4;}
-           
-            else if(browserWidth < 1350) {
-              limit = 6;
-            }
-            else if(browserWidth < 1600) {
-              limit = 9;
-            }
+         
 
-          }
-          setLimit(); 
 
-            console.log("limit:" + limit + "browserWidth:" + browserWidth);
 
           const [data, setData] = useState([]);
           const [activePage, setActivePage] = useState(1);
-          const [itemsPerPage] = useState(limit);
+          const [itemsPerPage] = useState(12);
           const [searchTerm, setSearchTerm] = useState('');
           const [formikProps, setFormikProps] = useState(null);
           const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);

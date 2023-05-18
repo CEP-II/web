@@ -34,7 +34,7 @@ const MyComponent = () => {
   const [citizens, setCitizens] = useState([]);
   const [selectedCitizen, setSelectedCitizen] = useState<string>('');
 
-  const [limit, setLimit] = useState<number>(12);
+  const [limit, setLimit] = useState<number>(15);
 
 
  
@@ -185,16 +185,14 @@ const MyComponent = () => {
                 ))}
               </select>
 
-               <select className="btn"id="limitDropdown" style={{position: 'absolute', top:'30%', height: '40%', width:'14%', fontSize:'2vw', color:'white'}} value={limit} onChange={handleLimitChange}>
-            <option value="12" >
-                Select Limit
-              </option>
-              <option value="6">6</option>
-              <option value="12">12</option>
-              <option value="18">18</option>
-              <option value="24">24</option>
-              <option value="36">36</option>
-            </select>
+              <select className="btn"id="limitDropdown" style={{position: 'absolute', top:'30%', height: '40%', width:'14%', fontSize:'2vw', color:'white'}} value={limit} onChange={handleLimitChange}>
+
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              </select>
           </div>
 
          
