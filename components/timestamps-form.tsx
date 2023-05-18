@@ -147,10 +147,6 @@ const MyComponent = () => {
     const newLimit = parseInt(event.target.value, 10);
     setLimit(newLimit);
     setActivePage(1);
-    
-  
-   
-
 
   };
 

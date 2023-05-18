@@ -227,12 +227,13 @@ export default function AdminForm()
 
           const [data, setData] = useState([]);
           const [activePage, setActivePage] = useState(1);
-          const [itemsPerPage] = useState(12);
+          
           const [searchTerm, setSearchTerm] = useState('');
           const [formikProps, setFormikProps] = useState(null);
           const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
           const [selectedItem, setSelectedItem] = useState<any | null>(null);
-
+          const [limit , setLimit] = useState(10);
+          const [itemsPerPage] = useState(limit);
 
           useEffect(() => {
             fetchData();
@@ -273,10 +274,7 @@ export default function AdminForm()
           const indexOfFirstItem = indexOfLastItem - itemsPerPage;
           let currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
-          if (searchTerm) {
-            // filter currentItems array by search term
-            currentItems = currentItems.filter(item => item.citizen.toString().includes(searchTerm));
-          }
+        
           const handleItemClick = (index:number ,item:any, values : FormikHelpers<Values> ) => {
             //fill in the form with the data of the user that is clicked
             console.log(item);
@@ -294,6 +292,15 @@ export default function AdminForm()
             
             setSelectedItemIndex(index);
             setSelectedItem(values);
+            
+          };
+
+
+          const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+            const newLimit = parseInt(event.target.value, 10);
+            setLimit(newLimit);
+            setActivePage(1);
+        
           };
             
         
@@ -331,6 +338,15 @@ export default function AdminForm()
                       window.location.href = '/';
                     }}>Log out</button>
                 </div>
+
+                 <select className="btn"id="limitDropdown" style={{position: 'absolute', top:'30%', height: '40%', width:'14%', fontSize:'2vw', color:'white'}} value={limit} onChange={handleLimitChange}>
+
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
           </div>
 
           <div className="mb-2" style={{position:'absolute', top:'12%' , left: '0%', width: '100%', height: '92%'}}>
@@ -419,12 +435,12 @@ export default function AdminForm()
             <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(auto-fit, minmax(${30}ch, 1fr))`,
+          gridTemplateColumns: `repeat(auto-fit, minmax(${28}ch, 1fr))`,
           gap: '10px',
           margin: '2%',
           maxWidth: '95%',
           overflow: 'auto',
-          fontSize: '1vw',
+          fontSize: '1.2rem',
         }}
       >
                 {currentItems.map((item, index) => {
@@ -450,15 +466,15 @@ export default function AdminForm()
                     >
                       {/* Render item details */}
 
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Name: {item.name}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Email: {item.email}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Phone Number: {item.phone}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Birthdate: {birthDate.toLocaleDateString()}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> City: {item.address.city}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Street: {item.address.street}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Postal: {item.address.postal}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Device ID: {item.deviceId}</p>
-                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> ID: {item._id}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Name: {item.name}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Email: {item.email}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Phone Number: {item.phone}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Birthdate: {birthDate.toLocaleDateString()}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> City: {item.address.city}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Street: {item.address.street}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Postal: {item.address.postal}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> Device ID: {item.deviceId}</p>
+                      <p style={{ fontSize: '1.2rem', margin: '0px', whiteSpace: 'nowrap'}}> ID: {item._id}</p>
                     
 
                   
