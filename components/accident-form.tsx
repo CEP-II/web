@@ -234,7 +234,7 @@ const MyComponent = () => {
         <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(auto-fit, minmax(${25}ch, 1fr))`,
+          gridTemplateColumns: `repeat(auto-fit, minmax(${30}ch, 1fr))`,
           gap: '10px',
           margin: '2%',
           maxWidth: '95%',
