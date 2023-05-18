@@ -63,7 +63,7 @@ const MyComponent = () => {
           //and ret the citizen to null
           setSelectedCitizen("");
           //make message to user
-          alert("No timestamps for this citizen");
+          alert("No timestamps for this citizen, defaulting to all timestamps");
             
         }
       }
@@ -168,7 +168,7 @@ const MyComponent = () => {
 
   return (
     <div>
-      <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: '12%' }}>
+  <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: 'auto' }}>
          <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
           <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
         
@@ -203,8 +203,8 @@ const MyComponent = () => {
 
 
                {/* drop down meny */}
-               <select className="btn"id="limitDropdown" style={{ fontSize:'1.5vw', color:'white'}} value={limit} onChange={handleCitizenChange}>
-                <option value="">Select Citizen</option>
+               <select className="btn"id="limitDropdown" style={{ fontSize:'1.5vw', color:'white'}} value={selectedCitizen} onChange={handleCitizenChange}>
+                <option value="">All Citizens</option>
                 {citizens.map((citizen, index) => (
                   <option key={index} value={citizen._id}>{citizen.name}</option>
                 ))}
@@ -224,7 +224,7 @@ const MyComponent = () => {
 
        </div>
 
-       <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>
+       <div style={{ position: 'absolute', left: '50%', top: 'calc(12% + 10px)', transform: 'translateX(-50%)', width: '100%' }}>
         {/* Render list items */}
         <div
   style={{

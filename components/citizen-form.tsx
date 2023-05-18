@@ -314,10 +314,10 @@ export default function AdminForm()
     return (
     <div>
 
-    <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: '12%' }}>
+<div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: 'auto' }}>
             <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
               <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
-              
+
               <div style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', right: '10px', padding: '10px'}}>
 
 
@@ -350,7 +350,7 @@ export default function AdminForm()
             </select>
           </div>
 
-          <div className="mb-2" style={{position:'absolute', top:'12%' , left: '0%', width: '100%', height: '92%'}}>
+          <div className="mb-2" style={{position:'absolute', top:'calc(12% + 10px' , left: '0%', width: '100%', height: '92%'}}>
                       
             
                       <Formik
@@ -372,7 +372,7 @@ export default function AdminForm()
                       {(formikProps) => (
                       <Form>
 
-                      <div style={{position: 'absolute', top: '0%' , left: '0%', background: '#73a6ff', height: '100%', width: '15%'}}>
+                      <div style={{position: 'absolute', top: '0%' , left: '0%', height: '100%', width: '15%'}}>
                               
 
                               <div className="mb-2" style={{padding: '2%' ,marginTop: '4%'}}>

@@ -156,75 +156,85 @@ interface Values {
   }
 
 
-
   return (
-    //this is the login form
-    <div >
-      <div >
-        <div className="d-flex justify-content-center align-items-start" style={{padding: '5%'}}>
-        <Image src={mypic} alt="" width="400" height="400" />
+    <div>
+      <div>
+        <div className="d-flex justify-content-center align-items-start" style={{ padding: '5%' }}>
+          <Image src={mypic} alt="" width="100%" height="100%" style={{ maxWidth: '400px' , maxHeight: '400px'}} />
         </div>
-      
-      <div className="d-flex justify-content-center align-items-start" >
-      <Formik
-        initialValues={{
-          username: '',
-          password: '',
-          isAdmin: false, // use "isAdmin" instead of "Admin"
-        }}
-        //handle summit that is called when the user clicks the login button
-        onSubmit={handleSubmit}
-      >
-        {({ isSubmitting }) => (
-        <Form>
-   
-        
-      
-          <div className="mb-2">
-            <Field className="form-control" id="username" name="username" placeholder="email" aria-describedby="usernameHelp" style={{ width: '300px' }} />
-          </div>
-      
-          <div className="mb-4">
-            <Field className={`form-control ${loginSuccess ? '' : 'is-invalid'}`} id="password" name="password" placeholder="Password" type="password" style={{ width: '300px' }}/>
-            {loginSuccess === false && <div className="invalid-feedback">Incorrect password or username</div>}
-          </div>
-
-          <div className="d-flex justify-content-center">
-  <button type="submit" className={`btn btn-primary mr-3 ${styles.color_button}`} style={{ marginRight: '15px', height: '60%' }} disabled={isSubmitting}>
-    Login
-  </button>
-
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-  <Field name="isAdmin">
-    {({ field: { value }, form: { setFieldValue } }) => (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Switch
-          
-          style={{ marginTop: '10px' }}
-          checked={value}
-          onChange={(value) => {
-            setFieldValue('isAdmin', value);
-            setFieldValue('username', value ? 'admin' : '');
-          }}
-        />
-        <label style={{ marginTop: '8px', marginLeft: '5px' }} htmlFor="isAdmin">Admin</label>
+  
+        <div className="d-flex justify-content-center align-items-start">
+          <Formik
+            initialValues={{
+              username: '',
+              password: '',
+              isAdmin: false,
+            }}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className="mb-2">
+                  <Field
+                    className="form-control"
+                    id="username"
+                    name="username"
+                    placeholder="email"
+                    aria-describedby="usernameHelp"
+                    style={{ width: '100%', maxWidth: '300px' }}
+                  />
+                </div>
+  
+                <div className="mb-4">
+                  <Field
+                    className={`form-control ${loginSuccess ? '' : 'is-invalid'}`}
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                    style={{ width: '100%', maxWidth: '300px' }}
+                  />
+                  {loginSuccess === false && <div className="invalid-feedback">Incorrect password or username</div>}
+                </div>
+  
+                <div className="d-flex justify-content-center">
+                  <button
+                    type="submit"
+                    className={`btn btn-primary mr-3 ${styles.color_button}`}
+                    style={{ marginRight: '15px', height: '60%' }}
+                    disabled={isSubmitting}
+                  >
+                    Login
+                  </button>
+  
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Field name="isAdmin">
+                      {({ field: { value }, form: { setFieldValue } }) => (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Switch
+                            style={{ marginTop: '10px' }}
+                            checked={value}
+                            onChange={(value) => {
+                              setFieldValue('isAdmin', value);
+                              setFieldValue('username', value ? 'admin' : '');
+                            }}
+                          />
+                          <label style={{ marginTop: '8px', marginLeft: '5px' }} htmlFor="isAdmin">
+                            Admin
+                          </label>
+                        </div>
+                      )}
+                    </Field>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    )}
-  </Field>
-</div>
-</div>
-
-   
-
-      </Form>
-      
-        )}
-      </Formik>
-      </div>
-    </div>
     </div>
   );
-};
+}
 
 
 
