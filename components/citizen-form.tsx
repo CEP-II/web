@@ -350,7 +350,7 @@ export default function AdminForm()
             </select>
           </div>
 
-          <div className="mb-2" style={{position:'absolute', top:'calc(12% + 10px' , left: '0%', width: '100%', height: '92%'}}>
+          <div className="mb-2" style={{position:'absolute', top:'12%' , left: '0%', width: '100%', height: '92%'}}>
                       
             
                       <Formik
