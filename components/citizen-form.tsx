@@ -163,16 +163,14 @@ export default function AdminForm()
          
             
 
-
+          
           const updateUser = (values: any) => {
-
-
             const updateUserData = [
               {propName: "name", value: values.name},
               {propName: "email", value: values.email},
               {propName: "phone", value: values.phoneNumber},
               
-              {propName: "birthdate", value: values.birthDate},
+       
               {propName: "deviceId", value: values.deviceId},
 
               //addres is an object
@@ -184,7 +182,10 @@ export default function AdminForm()
 
               //password update only if a new password is entered
               //if the password is not entered, the password will not be updated
-              ...(values.password !== "" ? [{ propName: "password", value: values.password }] : [])
+              ...(values.password !== "" ? [{ propName: "password", value: values.password }] : []),
+
+              //birthdate update only if a new birthdate is entered
+              ...(values.birthDate !== "" ? [{ propName: "birthdate", value: values.birthDate }] : [])
               
 
 
