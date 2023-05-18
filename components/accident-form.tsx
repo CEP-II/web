@@ -176,49 +176,53 @@ const MyComponent = () => {
       <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: '12%' }}>
          <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
           <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
-         <div style={{position: 'absolute' , top: '20%', left: '2%'}}>
-            {/* drop down meny */}
-            <select value={selectedCitizen} className="btn btn--primary" style={{background: '#0D6EFD', color: 'white', fontWeight: 'bold', fontSize:'1vw'}}onChange={handleCitizenChange}>
+        
+         
+          
+
+         
+
+          <div style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', right: '10px', padding: '10px'}}>
+
+
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',  marginRight: '0.2rem'}} onClick={() => {
+                      window.location.href = '/accidentPage';
+                      }}>Accidents</button>
+
+
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',  marginRight: '0.2rem'}}  onClick={() => {
+                      window.location.href = '/citizen';
+                      }}>Citizen</button>
+
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', marginRight: '0.2rem'}}  onClick={() => {
+                      window.location.href = '/timestamps';
+                      }}>Timestaps</button>
+
+                    <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',}}  onClick={() => {
+                      Cookies.remove('token');
+                      window.location.href = '/';
+                    }}>Log out</button>
+                </div>
+
+                <div style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', left: '10px'}}>
+
+
+               {/* drop down meny */}
+               <select className="btn"id="limitDropdown" style={{ fontSize:'1.5vw', color:'white'}} value={limit} onChange={handleCitizenChange}>
                 <option value="">Select Citizen</option>
                 {citizens.map((citizen, index) => (
                   <option key={index} value={citizen._id}>{citizen.name}</option>
                 ))}
               </select>
 
-              <select className="btn"id="limitDropdown" style={{position: 'absolute', top:'30%', height: '40%', width:'14%', fontSize:'2vw', color:'white'}} value={limit} onChange={handleLimitChange}>
+              <select className="btn"id="limitDropdown" style={{fontSize:'1.5vw', color:'white'}} value={limit} onChange={handleLimitChange}>
 
               <option value="10">10</option>
               <option value="15">15</option>
               <option value="20">20</option>
               <option value="30">30</option>
               <option value="50">50</option>
-              </select>
-          </div>
-
-         
-
-          <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
-
-
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
-                  window.location.href = '/accidentPage';
-                  }}>Accidents</button>
-
-
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
-                  window.location.href = '/citizen';
-                  }}>Citizen</button>
-
-                  <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
-                  window.location.href = '/timestamps';
-                  }}>Timestaps</button>
-
-                <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px' }}  onClick={() => {
-                  Cookies.remove('token');
-                  window.location.href = '/';
-                }}>Log out</button>
-
-                
+            </select>
             </div>
         
           

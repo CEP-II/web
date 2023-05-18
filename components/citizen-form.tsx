@@ -317,29 +317,30 @@ export default function AdminForm()
     <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: '12%' }}>
             <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
               <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
-              <div style={{position: 'absolute', top: '10px', right: '10px', padding: '10px'}}>
+              
+              <div style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', right: '10px', padding: '10px'}}>
 
 
-                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}} onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',  marginRight: '0.2rem'}} onClick={() => {
                       window.location.href = '/accidentPage';
                       }}>Accidents</button>
 
 
-                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',  marginRight: '0.2rem'}}  onClick={() => {
                       window.location.href = '/citizen';
                       }}>Citizen</button>
 
-                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px', marginRight: '5px'}}  onClick={() => {
+                      <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', marginRight: '0.2rem'}}  onClick={() => {
                       window.location.href = '/timestamps';
                       }}>Timestaps</button>
 
-                    <button type="button" className="btn btn-primary" style={{ fontSize: '1vw', padding: '5px 10px' }}  onClick={() => {
+                    <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',}}  onClick={() => {
                       Cookies.remove('token');
                       window.location.href = '/';
                     }}>Log out</button>
                 </div>
 
-                 <select className="btn"id="limitDropdown" style={{position: 'absolute', top:'30%', height: '40%', width:'14%', fontSize:'2vw', color:'white'}} value={limit} onChange={handleLimitChange}>
+                 <select className="btn"id="limitDropdown" style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', fontSize:'1.5vw', color:'white'}} value={limit} onChange={handleLimitChange}>
 
               <option value="10">10</option>
               <option value="15">15</option>
