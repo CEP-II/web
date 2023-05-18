@@ -174,14 +174,12 @@ const MyComponent = () => {
           padding: '2%',
           borderRadius: '10px',
           boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-          cursor: 'pointer',
+
           background: selectedItemIndex === index ? '#dae1e3' : '#fff',
           
           minWidth: 'fit-content', // Set the minWidth property to fit the content width
         }}
-        onClick={() => {
-          handleItemClick(index, item);
-        }}
+    
       >
         <p style={{ fontSize: '1.2rem', margin: '0.5rem 0', whiteSpace: 'nowrap' }}>Citizen: {typeof item.citizen === 'object' ? item.citizen.name : findCitizen(item.citizen)}</p>
         <p style={{ fontSize: '1.2rem', margin: '0.5rem 0', whiteSpace: 'nowrap' }}>Start time: {startTime.toLocaleString()}</p>
@@ -242,13 +240,13 @@ const MyComponent = () => {
                     padding: '2%',
                     borderRadius: '10px',
                     boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-                    cursor: 'pointer',
+      
                     background: selectedItemIndex === index ? '#dae1e3' : '#fff',
                     
                     minWidth: 'fit-content', // Set the minWidth property to fit the content width
                   
                   }}
-                    onClick={() => {handleItemClick(index, item)}}
+                    
                    >
                   <p style={{ fontSize: '1.2rem', margin: '0.2rem 0', whiteSpace: 'nowrap'}}>Citizen: {typeof item.citizen === 'object' ? item.citizen.name : findCitizen(item.citizen)}</p>
                   <p style={{fontSize: '1,2rem', margin: '0.2rem 0', whiteSpace: 'nowrap'}}>Time of Accident: {alarmTime.toLocaleString()}</p>
