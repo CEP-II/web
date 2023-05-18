@@ -235,7 +235,7 @@ const MyComponent = () => {
           margin: '2%',
           maxWidth: '95%',
           overflow: 'auto',
-          fontSize: '1vw',
+          fontSize: '1.2rem',
         }}
       >
         {/* Render list items */}
@@ -260,11 +260,11 @@ const MyComponent = () => {
             }}
               onClick={() => {handleItemClick(index, item)}}
              >
-            <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}>Citizen: {typeof item.citizen === 'object' ? item.citizen.name : findCitizen(item.citizen)}</p>
-            <p style ={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}>Time of Accidents: {alarmTime.toLocaleString()}</p>
-            <p style ={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}>Position: {item.positionId.toLocaleString()}</p>
-            <p style ={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}>Device ID: {item.deviceId}</p>
-           
+            <p style={{ fontSize: '1.2rem', margin: '0.2rem 0', whiteSpace: 'nowrap'}}>Citizen: {typeof item.citizen === 'object' ? item.citizen.name : findCitizen(item.citizen)}</p>
+            <p style={{fontSize: '1,2rem', margin: '0.2rem 0', whiteSpace: 'nowrap'}}>Time of Accident: {alarmTime.toLocaleString()}</p>
+            <p style={{fontSize: '1.2rem', margin: '0.2rem 0', whiteSpace: 'nowrap'}}>Position: {item.positionId}</p>
+            <p style={{fontSize: '1.2rem', margin: '0.2rem 0', whiteSpace: 'nowrap'}}>Device ID: {item.deviceId}</p>
+      
             </div>
           );
         })}
