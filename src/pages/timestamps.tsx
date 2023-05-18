@@ -7,7 +7,7 @@ const Dashboard: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Night assiss search </title>
+        <title>Night assiss timestamps </title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

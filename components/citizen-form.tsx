@@ -428,13 +428,17 @@ export default function AdminForm()
 
             {/* Data objects */}
             <div style={{ position: 'absolute', top: '0%', left: '15%', height: '85%', width: '85%' }}>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '10px',
-                margin: '10px auto',
-                maxWidth: '95%',
-              }}>
+            <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(auto-fit, minmax(${30}ch, 1fr))`,
+          gap: '10px',
+          margin: '2%',
+          maxWidth: '95%',
+          overflow: 'auto',
+          fontSize: '1vw',
+        }}
+      >
                 {currentItems.map((item, index) => {
                   const birthDate = new Date(item.birthdate);
 
@@ -451,26 +455,25 @@ export default function AdminForm()
                         boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
                         cursor: 'pointer',
                         background: selectedItemIndex === index ? '#dae1e3' : '#fff',
-                        width: '95%',
-                        maxWidth: '500px',
+                        
                         minWidth: 'fit-content', // Set the minWidth property to fit the content width
-                        margin: '1%',
                       }}
                       onClick={() => { handleItemClick(index, item, formikProps), console.log("Selected" + selectedItem + "" + index) }}
                     >
                       {/* Render item details */}
-                      <div className="item-container">
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold' , margin: '0.5rem 0'}}>Name: {item.name}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold' , margin: '0.5rem 0'}}>Email: {item.email}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Phone Number: {item.phoneNumber}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Birthdate: {birthDate.toLocaleDateString()}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>City: {item.address.city}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0'}}>Street: {item.address.street}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Postal: {item.address.postal}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>Device ID: {item.deviceId}</p>
-                        <p style={{ fontSize: '1vw', fontWeight: 'bold',margin: '0.5rem 0' }}>ID: {item.id}</p>
-                        
-                      </div>
+
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Name: {item.name}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Email: {item.email}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Phone Number: {item.phone}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Birthdate: {birthDate.toLocaleDateString()}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> City: {item.address.city}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Street: {item.address.street}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Postal: {item.address.postal}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> Device ID: {item.deviceId}</p>
+                      <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}> ID: {item._id}</p>
+                    
+
+                  
                     </div>
                   );
                 })}

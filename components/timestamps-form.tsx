@@ -154,6 +154,11 @@ const MyComponent = () => {
 
   };
 
+  const findCitizen = (citizenId: string) => {
+    const citizen = citizens.find((citizen) => citizen._id === citizenId);
+    return citizen?.name;
+  };
+
  
 
 
@@ -226,11 +231,12 @@ const MyComponent = () => {
         <div
   style={{
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-    gap: '2%',
-    margin: '1%',
+    gridTemplateColumns: `repeat(auto-fit, minmax(${25}ch, 1fr))`,
+    gap: '10px',
+    margin: '2%',
     maxWidth: '95%',
-    flexWrap: 'nowrap', // Prevent wrapping of items
+    overflow: 'auto',
+    fontSize: '1vw',
   }}
 >
   {/* Render list items */}
@@ -252,13 +258,15 @@ const MyComponent = () => {
           boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
           cursor: 'pointer',
           background: selectedItemIndex === index ? '#dae1e3' : '#fff',
-          width: '95%',
+          
           minWidth: 'fit-content', // Set the minWidth property to fit the content width
         }}
         onClick={() => {
           handleItemClick(index, item);
         }}
       >
+        <p style={{ fontSize: '1vw', margin: '0px', whiteSpace: 'nowrap'}}>Citizen: {typeof item.citizen === 'object' ? item.citizen.name : findCitizen(item.citizen)}</p>
+
         <p style={{ fontSize: '1vw', margin: '0px' ,whiteSpace: 'nowrap'}}>Start time: {startTime.toLocaleString()}</p>
         <p style={{ fontSize: '1vw', margin: '0px',whiteSpace: 'nowrap' }}>Position: {item.positionId}</p>
         <p style={{ fontSize: '1vw', margin: '0px',whiteSpace: 'nowrap' }}>Duration: {duration} ms</p>
