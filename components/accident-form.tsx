@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { Variables } from '../data/globalVariable';
 import Pagination from 'react-js-pagination';
 import styles from '../components/stdColors.module.css'
-import { get } from 'http';
+
 
 
 

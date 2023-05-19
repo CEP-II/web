@@ -84,7 +84,6 @@ const MyComponent = () => {
         Cookies.remove('token');
         window.location.href = '/';
       }
-        
     }
   };
 
@@ -168,18 +167,10 @@ const MyComponent = () => {
 
   return (
     <div>
-  <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: 'auto' }}>
+      <div className={styles.color_topbar} style={{ position: 'absolute', top: '0%', left: '0%', width: '100%', height: 'auto' }}>
          <h1 style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: '3vw' }}>Night Assist</h1>
           <h3 style={{ textAlign: 'center', color: 'white', fontSize: '2vw' }}>Your Guide through the night</h3>
-        
-         
-          
-
-         
-
           <div style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', right: '10px', padding: '10px'}}>
-
-
                       <button type="button" className="btn btn-primary" style={{ fontSize: '1vw',  marginRight: '0.2rem'}} onClick={() => {
                       window.location.href = '/accidentPage';
                       }}>Accidents</button>
@@ -197,7 +188,7 @@ const MyComponent = () => {
                       Cookies.remove('token');
                       window.location.href = '/';
                     }}>Log out</button>
-                </div>
+          </div>
 
                 <div style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', left: '10px'}}>
 
@@ -211,7 +202,6 @@ const MyComponent = () => {
               </select>
 
               <select className="btn"id="limitDropdown" style={{fontSize:'1.5vw', color:'white'}} value={limit} onChange={handleLimitChange}>
-
               <option value="10">10</option>
               <option value="15">15</option>
               <option value="20">20</option>

@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import {Variables} from '../data/globalVariable';
 import Cookies from 'js-cookie';
-import Toggle from "react-switch";
 import {Switch} from 'antd';
 
 const admin = true;

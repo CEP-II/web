@@ -79,6 +79,7 @@ export default function AdminForm()
         const validate = (values: Values) => {
             const errors: Partial<Values> = {};
             var noError = true;
+            
     
             if (!values.name) {
               errors.name = "Name is required";
@@ -163,7 +164,7 @@ export default function AdminForm()
          
             
 
-          
+
           const updateUser = (values: any) => {
             const updateUserData = [
               {propName: "name", value: values.name},
@@ -343,12 +344,12 @@ export default function AdminForm()
 
                  <select className="btn"id="limitDropdown" style={{position: 'absolute', top: '50%',transform: 'translateY(-50%)', fontSize:'1.5vw', color:'white'}} value={limit} onChange={handleLimitChange}>
 
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="50">50</option>
-            </select>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                </select>
           </div>
 
           <div className="mb-2" style={{position:'absolute', top:'12%' , left: '0%', width: '100%', height: '92%'}}>
@@ -397,7 +398,7 @@ export default function AdminForm()
                               </div>
 
                               <div className="mb-2" style={{padding: '2%'}}>
-                                  {/* Birthdate input */}
+                              
                                   <Field className="form-control" id="birthDate" name="birthDate" type="date" style={{fontSize:'1vw'}}/>
                               </div>
 
