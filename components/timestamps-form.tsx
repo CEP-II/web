@@ -38,7 +38,9 @@ const MyComponent = () => {
 
  
   
-
+  useEffect(() => {
+    getCitizenName();
+  }, []);
   
 
   useEffect(() => {
@@ -122,6 +124,8 @@ const MyComponent = () => {
       
     } catch (error) {
       console.log(error);
+      Cookies.remove('token');
+        window.location.href = '/';
     
     
     }
@@ -158,9 +162,7 @@ const MyComponent = () => {
  
 
 
-  useEffect(() => {
-    getCitizenName();
-  }, []);
+
   
 
 

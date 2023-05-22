@@ -63,9 +63,11 @@ export default function AdminForm()
                     deviceId : values.deviceId,
                 })
                 //if the user is created successfully we get a message
-                .then(response => {fetchData(),console.log("eroor comes in response") , console.log(response.data.message), fetchData()})
+                .then(response => { fetchData()})
                 .catch(error => {
-           
+                  console.log(error.message);
+                  if(error.message == "Request failed with status code 409")
+                     alert("Unique credential in use");
                 });
             
         }

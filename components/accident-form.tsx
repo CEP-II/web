@@ -97,7 +97,7 @@ const MyComponent = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${Variables.API_URL}/timestamps/${selectedItem?._id}`, {
+      const response = await axios.delete(`${Variables.API_URL}/accident/${selectedItem?._id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         },
