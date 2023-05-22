@@ -79,10 +79,10 @@ export default function AdminForm()
         };
 
         const validate = (values: Values) => {
+          //test the values one by one and if there is an error we set the error message
             const errors: Partial<Values> = {};
             var noError = true;
-            
-    
+
             if (!values.name) {
               errors.name = "Name is required";
               noError = false;
@@ -134,10 +134,11 @@ export default function AdminForm()
             }
           };
 
-
+          //when the form is submitted we call the createUser functionq, ie when create button is clicked
           const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
             console.log(values);
             var errors = validate(values);
+            //Test if the passwords match
             if (passwordMatch) {
               createUser(values);
             }
@@ -168,6 +169,7 @@ export default function AdminForm()
 
 
           const updateUser = (values: any) => {
+            //create an array with the values that will be updated
             const updateUserData = [
               {propName: "name", value: values.name},
               {propName: "email", value: values.email},
@@ -195,7 +197,7 @@ export default function AdminForm()
 
 
             ]
-
+            //send the patch request to the backend to update the user
             axios.patch(Variables.API_URL + '/citizen/'+ values.id, updateUserData, {
               headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
@@ -205,6 +207,7 @@ export default function AdminForm()
             
             }).then(response => {
               console.log(response.data.message);
+              //then fetch the data again to update the table
               fetchData();
             }
             ).catch(error => {
@@ -213,7 +216,7 @@ export default function AdminForm()
 
           };
 
-
+          //get the browser resolution width
           function getBrowserResolutionWidth() {
             if (typeof window !== 'undefined') {
               return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -228,7 +231,7 @@ export default function AdminForm()
          
 
 
-
+          //hooks for citizen data
           const [data, setData] = useState([]);
           const [activePage, setActivePage] = useState(1);
           
@@ -239,10 +242,12 @@ export default function AdminForm()
           const [limit , setLimit] = useState(10);
           const [itemsPerPage] = useState(limit);
 
+          //get the data from the backend
           useEffect(() => {
             fetchData();
           }, []);
 
+          //api call to get the data
           const fetchData = async () => {
             
 
@@ -264,21 +269,19 @@ export default function AdminForm()
             
           };
 
+          //handle page change
           const handlePageChange = (pageNumber:any) => {
             setActivePage(pageNumber);
           };
 
-          const handleSearch = (event:any) => {
-            setSearchTerm(event.target.value);
-            setActivePage(1); // reset active page when search term changes
-          };
+         
 
 
           const indexOfLastItem = activePage * itemsPerPage;
           const indexOfFirstItem = indexOfLastItem - itemsPerPage;
           let currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
-        
+        //put the data in the fields when the user is clicked
           const handleItemClick = (index:number ,item:any, values : FormikHelpers<Values> ) => {
             //fill in the form with the data of the user that is clicked
             console.log(item);
@@ -299,7 +302,7 @@ export default function AdminForm()
             
           };
 
-
+          //handle limit change to show les or more items per page
           const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
             const newLimit = parseInt(event.target.value, 10);
             setLimit(newLimit);

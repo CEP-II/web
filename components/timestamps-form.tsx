@@ -49,6 +49,8 @@ const MyComponent = () => {
 
   //this function will get one page of timeStamps from the backend
   const getTimeStamps = async (pageNumber: number ,citizen: string ) => {
+    //first check if we are searching for a citizen
+    //else get all timestamps
     if(citizen !== ""){
 
     try{
@@ -69,34 +71,38 @@ const MyComponent = () => {
             
         }
       }
+      //Get all timestamps here
       else
       {
-      try {
-        const response = await axios.get(`${Variables.API_URL}/timestamps?page=${pageNumber}&limit=${limit}`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('token')}`,
-          },
-        });
-        setTimeStamps(response.data.timestamps);
-        setTotalPages(response.data.totalPages);
-        console.log(response.data);
-       
-  
-      } catch (error) {
-        Cookies.remove('token');
-        window.location.href = '/';
+        try {
+
+          const response = await axios.get(`${Variables.API_URL}/timestamps?page=${pageNumber}&limit=${limit}`, {
+            headers: {
+              Authorization: `Bearer ${Cookies.get('token')}`,
+            },
+          });
+          setTimeStamps(response.data.timestamps);
+          setTotalPages(response.data.totalPages);
+          console.log(response.data);
+        
+    
+        } catch (error) {
+          Cookies.remove('token');
+          window.location.href = '/';
+        }
       }
-    }
   };
 
 
   const resetItemClicked = () => {
+    //reset hooks for selected item
     setSelectedItemIndex(null);
     setSelectedItem(null);
   };
 
   const handleDelete = async () => {
     try {
+      //make a delete request to the backend
       const response = await axios.delete(`${Variables.API_URL}/timestamps/${selectedItem?._id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
@@ -134,6 +140,7 @@ const MyComponent = () => {
   };
 
   const handleCitizenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //handle citizen change aka select a citizen search
     const selectedCitizen = event.target.value;
     setSelectedCitizen(selectedCitizen);
     setActivePage(1)
@@ -143,11 +150,13 @@ const MyComponent = () => {
   };
 
   const handleItemClick = (index: number, values: timeStamp) => {
+    //set hooks for selected item
     setSelectedItemIndex(index);
     setSelectedItem(values);
   };
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //set hooks for new limit
     const newLimit = parseInt(event.target.value, 10);
     setLimit(newLimit);
     setActivePage(1);
@@ -155,6 +164,7 @@ const MyComponent = () => {
   };
 
   const findCitizen = (citizenId: string) => {
+    //find citizen name by id so we can display it instead of id
     const citizen = citizens.find((citizen) => citizen._id === citizenId);
     return citizen?.name;
   };

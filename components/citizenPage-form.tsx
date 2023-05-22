@@ -16,9 +16,9 @@ interface timeStamp {
 
 const MyComponent = () => {
 
-  //timestamp
 
 
+  //hooks for holding variables
   const [timeStamps, setTimeStamps] = useState<timeStamp[]>([]);
   const [activePage, setActivePage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -45,17 +45,21 @@ const MyComponent = () => {
     }
   };
 
+  
   const handleItemClick = (index: number, values: timeStamp) => {
+    //set hooks for selected item
     setSelectedItemIndex(index);
     setSelectedItem(values);
   };
 
   const resetItemClicked = () => {
+    //reset hooks for selected item
     setSelectedItemIndex(null);
     setSelectedItem(null);
   };
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //set hooks for limit
     const newLimit = parseInt(event.target.value, 10);
     setLimit(newLimit);
     setActivePage(1);
@@ -84,6 +88,7 @@ const MyComponent = () => {
 
   const getAccidents = async () => {
     console.log(Cookies.get('citizenId'));
+    //get all accidents by citizen id
     try {
       const response = await axios.get(`${Variables.API_URL}/accident/by-citizen/${Cookies.get('citizenId')}`, {
         headers: {

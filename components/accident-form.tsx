@@ -76,6 +76,7 @@ const MyComponent = () => {
             Authorization: `Bearer ${Cookies.get('token')}`,
           },
         });
+        //set new data as hook
         setTimeStamps(response.data.accidents);
         setTotalPages(response.data.totalPages);
         console.log(response.data);
@@ -91,12 +92,14 @@ const MyComponent = () => {
 
 
   const resetItemClicked = () => {
+    //reset hooks to null
     setSelectedItemIndex(null);
     setSelectedItem(null);
   };
 
   const handleDelete = async () => {
     try {
+      //call delete api
       const response = await axios.delete(`${Variables.API_URL}/accident/${selectedItem?._id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
@@ -114,11 +117,13 @@ const MyComponent = () => {
   //get citizen name to make a drop down menu for selcting citizen to get data from
   const getCitizenName = async () => {
     try {
+      //get citizen names
       const response = await axios.get(`${Variables.API_URL}/citizen`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('token')}`,
         },
       });
+      //set citizen names hook
       setCitizens(response.data.citizens);
       console.log("citizens" + response.data.citizens);
       
@@ -132,6 +137,7 @@ const MyComponent = () => {
   };
 
   const handleCitizenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //set selected citizen hook
     const selectedCitizen = event.target.value;
     setSelectedCitizen(selectedCitizen);
     setActivePage(1)
@@ -139,13 +145,15 @@ const MyComponent = () => {
     console.log(selectedCitizen);
     
   };
-
+  //set the selected item hook to the item clicked, item being a accident
   const handleItemClick = (index: number, values: timeStamp) => {
     setSelectedItemIndex(index);
     setSelectedItem(values);
   };
 
+
   const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //set new limit hook
     const newLimit = parseInt(event.target.value, 10);
     setLimit(newLimit);
     setActivePage(1);
@@ -157,6 +165,7 @@ const MyComponent = () => {
   };
 
   const findCitizen = (citizenId: string) => {
+    //finds citizen name by id
     const citizen = citizens.find((citizen) => citizen._id === citizenId);
     return citizen?.name;
   };
