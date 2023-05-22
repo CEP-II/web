@@ -132,6 +132,7 @@ const MyComponent = () => {
   const handleCitizenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCitizen = event.target.value;
     setSelectedCitizen(selectedCitizen);
+    setActivePage(1)
 
     console.log(selectedCitizen);
     
